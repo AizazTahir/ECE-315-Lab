@@ -7,85 +7,6 @@
  */
 
 
-// In the lab, a Proof of Work (PoW) is the hash produced by adding a nonce (an arbitrary number that can be used just
-// once in a cryptographic communication) to a specific string, such that the hash begins with a number of zeros exceeding
-// a predetermined difficulty level. This process, demanding considerable computational effort, demonstrates the hashing
-// function's probabilistic nature and the substantial work needed to find a qualifying hash.
-// System Operation:
-// ● Input Task: This task uses repeated polling of the UART registers for capturing and forwarding user
-// inputs which are the keystrokes on the keyboard that enter text into the terminal window of the SDK. The
-// task captures the user's keyboard input and directs it to the appropriate task for further processing in the
-// embedded system or display.
-// ● Hashing Task: Receives data from the input task and executes various operations based on the
-// user-selected options. It:
-// ○ Applies a cryptographic hashing function (SHA-256) to the input and transmits the resulting hash
-// to the Output Task for display.
-// ○ Accepts a provided string and a corresponding hash, then checks to see if the computed hash
-// matches the provided one. The Hashing Task subsequently relays the results to the Output Task,
-// which displays a success message to the user if a match is confirmed, or an error message in the
-// event of a mismatch.
-// ○ Attempts to find a hash that meets a specified difficulty level by adjusting the nonce and iterating
-// the process until successful.
-// ● Proof of Work Task: Receives a string, a difficulty level, a nonce, and a hash from the Hashing Task. It
-// validates whether the hash meets the set difficulty. If unsuccessful, the task increments the nonce and
-// returns the data for rehashing. Upon finding a valid hash, it signals success.
-// ● Output Task: This function is dedicated to managing the data received from the Input, Proof of Work
-// and Hashing Tasks. It formats the data and sends it out through the UART.
-// After its initialization, the system offers the user three primary services: Hash Generation, Hash Verification and
-// Generation of a Proof Of Work.
-// Department of Electrical and Computer Engineering
-// 11-203 Donadeo Innovation Centre for Engineering, 9211-116 Street NW,
-// University of Alberta, Edmonton, Alberta, Canada T6G 1H9 5/13
-// ECE 315 Computer Interfacing
-// LAB 2: The Zynq-7000 UART Interface
-// Winter 2024
-// For the Hash Generation service, the user inputs text via the keyboard. The Input Task captures this input and relays it
-// to the Hashing Task, which computes the hash of the received data. The computed hash is then forwarded to the output
-// queue for display in the SDK terminal window.
-// For the Hash Verification service, the user is required to input a string followed by its corresponding hash. This input
-// string is processed by the Hashing Task, which calculates the hash of the provided string and then compares it with the
-// user-supplied hash. The system then displays a success message if the hashes match, or an error message in case of a
-// mismatch.
-// For the Proof of Work service, the user submit a string and a difficulty level. The system, starting with a nonce at 0,
-// attempts to generate a hash that has a number of leading zeros at least equal to the difficulty level. The Hashing Task
-// sends this data to the Proof of Work Task, which checks if the hash meets the difficulty. If not, the nonce is
-// incremented, and the process repeats until a valid hash is found, at which point a success message is displayed.
-// When you start, load the provided resource files into a project and run it using the system debugger configuration and
-// connecting to SDK serial terminal. You should see a menu with three options, like in Figure 2 below
-// However, you will notice that trying to execute any operation results in the app just printing the menu message. This is
-// because the logic for the app is incomplete. It is your job to finish the code so that the app can function properly as
-// described in the system operation.
-// Your main tasks for this part of the lab are as follows:
-// Department of Electrical and Computer Engineering
-// 11-203 Donadeo Innovation Centre for Engineering, 9211-116 Street NW,
-// University of Alberta, Edmonton, Alberta, Canada T6G 1H9 6/13
-// ECE 315 Computer Interfacing
-// LAB 2: The Zynq-7000 UART Interface
-// Winter 2024
-// 1. Declare a queue that will send data to the display task called xOutputQueue.
-// 2. Write the body of vOutputTask which is to repeatedly poll the output queue for data and send any
-// received bytes to the UART.
-// 3. Write the body of the printString function which is to send data to the outputQueue.
-// 4. Finish the receiveInput function, which is to poll the UART for data and use printString to display the
-// chosen option.
-// 5. Write the body of the hashToString function to read a BYTE array and turn it into its hexadecimal
-// representation.
-// 6. Use the hashToString function inside the hashing task to turn the computed hash into its hex
-// representation.
-// 7. Print the hash using the printString function.
-// 8. Inside the hashing task’s ‘verify’ branch, compare the two hash strings and print a message to inform the
-// user of the result (success or error).
-// 9. At this point your application should be able to support the Hashing and verification services.
-// 10. Create the PoW input and output queues, named xPoWInQueue and xPoWOutQueue, ensuring each
-// queue contains a specific number of elements, to be determined by you. Additionally, the size of each
-// element within these queues should match the size of the ProofOfWork struct..
-// 11. Use the newly implemented queues to add receiving and sending data capability to the Proof of Work task
-// so that it receives data from the Hashing task and after verifying the result (if necessary) send the data back
-// to the Hashing task.
-// 12. Add sending and receive functions to the Hashing tasks so that it can exchange data with the Proof of
-// Work task.
-// 13. Create the PoWTask and give it a tskIDLE_PRIORITY.
-
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
@@ -204,12 +125,11 @@ void receiveInput(void) {
     while (1) {
 	/*************************** Enter your code here ****************************/
 		// TODO 4: receive data from UART device and store it into input
-		// Use xQueueSend to send the input to the input queue
-		// Break on null character
-		if (!XUartPs_IsReceiveData(UART_BASEADDR)){
+		if (!XUartPs_IsReceiveData(UART_BASEADDR)) {
+			vTaskDelay(xDelay);
 			continue;
 		}
-		input = (u8) XUartPs_ReadReg(UART_BASEADDR, XUARTPS_FIFO_OFFSET);
+		input = (char) XUartPs_ReadReg(UART_BASEADDR, XUARTPS_FIFO_OFFSET);
 
 	/*****************************************************************************/
 
@@ -228,6 +148,7 @@ void receiveInput(void) {
 		// TODO 4: Use printString instead of xil_printf to print the character
 		// to the UART
 		printString(&input);  // this is so we echo the input back to the user for visual confirmation
+
 	/*****************************************************************************/
     }
 }
@@ -310,6 +231,8 @@ void vInputTask(void *pvParameters)
                     xil_printf("\rOption not recognized");
 					continue; // Explicitly continue the loop
 			}
+    		vTaskDelay(xPollPeriod);
+
 			break;
         }
     }
@@ -434,43 +357,50 @@ void vHashingTask(void *pvParameters)
         vTaskDelay(xPollPeriod);
     }
 }
-
-void vPoWTask(void *pvParameters)
-{
+void vPoWTask(void *pvParameters) {
     u8 zeros = 0;
     u32 xPollPeriod = 10U;
     char hashString[65];
     ProofOfWork powProof;
 
-    while(1){
+    while(1) {
         memset(&powProof, 0, sizeof(powProof)); // Reset powProof at the start of each loop
 
+        // Receive data from the PoW input queue
         if (xQueueReceive(xPoWInQueue, &powProof, portMAX_DELAY) == pdPASS) {
             // Assume valid data received; proceed with processing
 
+            // Flashing lights logic: light changes every 5 nonces, additional light at every 10 nonces
+            if (powProof.nonce % 5 == 0) {
+                XGpio_DiscreteWrite(&greenLedsInst, LEDS_CHANNEL, 0x08);
+            }
+            if (powProof.nonce % 10 == 0) {
+                XGpio_DiscreteWrite(&greenLedsInst, LEDS_CHANNEL, 0x01);
+            }
+
             zeros = leadingZeroCount(powProof.hash);
 
-            // Additional validation: ensure difficulty is set and hash is not all zeros
-            if (powProof.difficulty > 0 && !(zeros == 32 * 8)) { // 32 bytes * 8 bits
-                if(zeros >= powProof.difficulty){
+            // Validate difficulty and hash correctness
+            if (powProof.difficulty > 0 && !(zeros == 32 * 8)) {
+                if (zeros >= powProof.difficulty) {
                     xil_printf("\n*******************************************\n");
                     xil_printf("\nPOW for \"%s\" found\n", powProof.hash_string);
                     hashToString(powProof.hash, hashString);
                     xil_printf("\n\tstring:\t\t%s\n\tnonce:\t%d\n\thash:\t\t%s\n", powProof.hash_string, powProof.nonce, hashString);
-                    XGpio_DiscreteWrite(&greenLedsInst, LEDS_CHANNEL, 0);
-                    // Reset nonce for next round of calculation
-                    powProof.nonce = 0;
+                    XGpio_DiscreteWrite(&greenLedsInst, LEDS_CHANNEL, 0); // Turn off LEDs on success
+                    powProof.nonce = 0; // Reset nonce for next round
                 } else {
-                    // increment nonce for next calculation
+                    // Increment nonce and send back for further processing if not successful
                     powProof.nonce += 1;
-                    // Optionally send back for further processing
-                    xQueueSend(xPoWOutQueue, &powProof, 0); // Handle error as needed
+                    xQueueSend(xPoWOutQueue, &powProof, 0); // Non-blocking send, handle error as needed
                 }
             }
         }
+        // Delay to allow other tasks to run and to avoid tight loop in case of queue being empty
         vTaskDelay(xPollPeriod);
     }
 }
+
 
 
 

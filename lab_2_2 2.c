@@ -199,12 +199,16 @@ void vBufferReceiveTask(void *p)
 /*************************** Enter your code here ****************************/
 		// TODO 7: Call user defined receive function to return the received data.
 		// Store value in "pcString" variable
+		pcString = myReceiveByte();
 
 		while(myTransmitFull() == pdTRUE);
 		formattedChar  = (char) pcString;
 		// Write the code to change the capitalization of the received byte
-
+		if (isalpha(formattedChar)) {
+            formattedChar = islower(formattedChar) ? toupper(formattedChar) : tolower(formattedChar);
+        }
 		// Increment the receive interrupt counter
+		byteCount++;
 
 		updateRollingBuffer(pcString);
 		mySendByte(formattedChar );
@@ -215,7 +219,14 @@ void vBufferReceiveTask(void *p)
 		}
 		// detect \r%\r sequence here, if detected set byte and interrupt counters to 0
 		// and print the message "Byte Count, and interrupt counters set to zero\n\n"
+		if (checkBufferSequence("\r%\r")) {
+			byteCount = 0;
+			countRxIrq = 0;
+			countTxIrq = 0;
 
+			memset(rollingBuffer, 0, SEQUENCE_LENGTH);
+			printString("Byte Count, and interrupt counters set to zero\n\n");
+		}
 /*****************************************************************************/
 	}
 }

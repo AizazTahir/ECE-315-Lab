@@ -250,6 +250,9 @@ void vHashingTask(void *pvParameters)
 	int no_of_characters_read=0;
     static char receivedString[QUEUE_LENGTH];
 
+    static char precomputedHashString[65]; // Add this line to store the precomputed hash string
+
+
     while (1)
     {
         if (choice != NOP){
@@ -270,41 +273,45 @@ void vHashingTask(void *pvParameters)
 					// TODO 6: Convert hash from BYTE to string using hashToString
 					// Calculate SHA-256 hash of received string using shaString
 					sha256String(receivedString, hash);
-					hashToString(hash, hashString);
+					hashToString(hash, receivedString);
 
 			/*****************************************************************************/
 			/*************************** Enter your code here ****************************/
 					// TODO 7: print hash using printString
-					xil_printf("\n\nSHA256 Hash of \"%s\" is: %s\n", receivedString, hashString);
+					xil_printf("\n\nSHA256 Hash of \"%s\" is: %s\n", receivedString);
 					printString(hashString);
+
+
 			/*****************************************************************************/
 					break;
 
 				case VERIFY:
-					// If verify_flag is 0, store the received string
-					if (verify_flag == 0){
-						strcpy(receivedString, hashString); // Copy hashString to receivedString which is the hash 
-						verify_flag = 1;
-					} else if (verify_flag == 1){
-						// Calculate SHA-256 hash of received string
-						sha256String(receivedString, hash);
-						// Convert hash from BYTE to string
-						hashToString(hash, receivedString);
-			/*************************** Enter your code here ****************************/
-					// TODO 8: compare receivedString and hashString and print a message
-					// to inform the user of the result (success or error)
-					if (strcmp(receivedString, hashString) == 0){
-						xil_printf("\n\nHashes match!\n");
-						printString("Hashes match!\n");
-					} else {
-						xil_printf("\n\nHashes do not match!\n");
-						printString("Hashes do not match!\n");
-					}
+				    if (verify_flag == 0){
+				        // Store the precomputed hash string
+				        strncpy(precomputedHashString, receivedString, sizeof(precomputedHashString)-1);
+				        precomputedHashString[sizeof(precomputedHashString)-1] = '\0'; // Ensure null-termination
+				        verify_flag = 1;
+				    } else if (verify_flag == 1){
+				        // Calculate SHA-256 hash of the new input string
+				        sha256String(receivedString, hash);
+				        char newHashString[65]; // To store the new hash as a string
+				        hashToString(hash, newHashString); // Convert the new hash to a string
 
-			/*****************************************************************************/
-						verify_flag = 0;
-					}
-					break;
+				        // Now compare the new hash string with the precomputed hash string
+				        if (strcmp(newHashString, precomputedHashString) == 0){
+				            xil_printf("\n\nHashes match!\n");
+				            printString("Hashes match!\n");
+				        } else {
+				            xil_printf("\n\nHashes do not match!\n");
+				            printString("Hashes do not match!\n");
+				        }
+
+				        verify_flag = 0; // Reset for next operation
+				    }
+				    // Clear the buffers to be ready for the next input
+				    memset(receivedString, 0, sizeof(receivedString));
+				    memset(hashString, 0, sizeof(hashString));
+				    break;
 
 				case POW:
 					if (pow_flag == 0){
@@ -319,6 +326,25 @@ void vHashingTask(void *pvParameters)
 								xil_printf("wrong input value.");
 								pow_flag = 0;
 								break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 							}
 						}
 				/*************************** Enter your code here ****************************/

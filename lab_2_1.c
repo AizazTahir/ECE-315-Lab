@@ -326,25 +326,6 @@ void vHashingTask(void *pvParameters)
 								xil_printf("wrong input value.");
 								pow_flag = 0;
 								break;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 							}
 						}
 				/*************************** Enter your code here ****************************/

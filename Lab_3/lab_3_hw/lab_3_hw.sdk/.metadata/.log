@@ -5382,3 +5382,41 @@ java.lang.NullPointerException
 	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:144)
 	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.eclipse.core.resources 4 568 2024-03-18 14:50:39.992
+!MESSAGE Could not write metadata for '/RemoteSystemsTempFiles'.
+!STACK 0
+java.io.FileNotFoundException: C:\Users\matahir\Desktop\ECE-315-Lab\Lab_3\lab_3_hw\lab_3_hw.sdk\.metadata\.plugins\org.eclipse.core.resources\.projects\RemoteSystemsTempFiles\.markers.snap (The system cannot find the path specified)
+	at java.io.FileOutputStream.open0(Native Method)
+	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:133)
+	at org.eclipse.core.internal.localstore.SafeChunkyOutputStream.<init>(SafeChunkyOutputStream.java:45)
+	at org.eclipse.core.internal.localstore.SafeChunkyOutputStream.<init>(SafeChunkyOutputStream.java:41)
+	at org.eclipse.core.internal.resources.SaveManager.visitAndSnap(SaveManager.java:1768)
+	at org.eclipse.core.internal.resources.SaveManager.visitAndSnap(SaveManager.java:1852)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1224)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1165)
+	at org.eclipse.core.internal.resources.DelayedSnapshotJob.run(DelayedSnapshotJob.java:52)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY com.xilinx.sdk.utils 0 0 2024-03-18 14:55:03.117
+!MESSAGE XSCT Command: [ ::hsi::utils::set_current_hw_sw C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/design_test_wrapper_hw_platform_0/system.hdf C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/part_1_bsp/system.mss ], Thread: main
+
+!ENTRY com.xilinx.sdk.utils 0 0 2024-03-18 14:55:03.122
+!MESSAGE XSCT command with result: [ ::hsi::utils::set_current_hw_sw C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/design_test_wrapper_hw_platform_0/system.hdf C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/part_1_bsp/system.mss ], Result: [null, ]. Thread: main
+
+!ENTRY com.xilinx.sdk.utils 0 0 2024-03-18 14:55:03.122
+!MESSAGE XSCT Command: [::hsi::utils::get_hw_sw_details -json C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/design_test_wrapper_hw_platform_0/system.hdf C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/part_1_bsp/system.mss], Thread: main
+
+!ENTRY com.xilinx.sdk.utils 0 0 2024-03-18 14:55:03.125
+!MESSAGE XSCT command with result: [::hsi::utils::get_hw_sw_details -json C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/design_test_wrapper_hw_platform_0/system.hdf C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/part_1_bsp/system.mss], Result: [null, {"procname": "ps7_cortexa9_0",
+"osname": "freertos10_xilinx",
+"osver": "1.3",
+}]. Thread: main
+
+!ENTRY com.xilinx.sdk.utils 0 0 2024-03-18 14:55:03.126
+!MESSAGE XSCT Command: [::hsi::utils::closesw C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/part_1_bsp/system.mss], Thread: main
+
+!ENTRY com.xilinx.sdk.utils 0 0 2024-03-18 14:55:03.127
+!MESSAGE XSCT command with result: [::hsi::utils::closesw C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/part_1_bsp/system.mss], Result: [null, ]. Thread: main

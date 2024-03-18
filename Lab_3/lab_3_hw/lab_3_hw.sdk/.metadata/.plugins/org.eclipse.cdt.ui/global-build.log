@@ -52696,3 +52696,77 @@ make -C ps7_cortexa9_0/libsrc/xadcps_v2_3/src -s libs  "SHELL=CMD" "COMPILER=arm
 **** Build of configuration Debug for project part_1 ****
 
 Nothing to build for project part_1
+14:55:10 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/initialization.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/initialization.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/initialization.d" -MT"src/initialization.o" -o "src/initialization.o" "../src/initialization.c"
+../src/initialization.c:106:1: warning: return type defaults to 'int' [-Wimplicit-int]
+ spiMasterRead(int byteCount)
+ ^~~~~~~~~~~~~
+../src/initialization.c:106:1: warning: conflicting types for 'spiMasterRead'
+In file included from ../src/initialization.c:13:
+../src/initialization.h:28:13: note: previous declaration of 'spiMasterRead' was here
+ extern void spiMasterRead( int byteCount );
+             ^~~~~~~~~~~~~
+'Finished building: ../src/initialization.c'
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vUartManagerTask':
+../src/lab_3_part_1_student.c:166:5: warning: unused variable 'dummy' [-Wunused-variable]
+  u8 dummy = DOLLAR;     // dummy char to send to the slave as a control character
+     ^~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:224:5: warning: unused variable 'send_buffer' [-Wunused-variable]
+  u8 send_buffer[1];
+     ^~~~~~~~~~~
+../src/lab_3_part_1_student.c:223:6: warning: unused variable 'received_bytes' [-Wunused-variable]
+  u32 received_bytes=0;
+      ^~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:222:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../src/lab_3_part_1_student.c:262:7: warning: unused variable 'buffer' [-Wunused-variable]
+  char buffer[150];
+       ^~~~~~
+../src/lab_3_part_1_student.c:261:6: warning: unused variable 'spi_rx_bytes' [-Wunused-variable]
+  int spi_rx_bytes = 0;
+      ^~~~~~~~~~~~
+../src/lab_3_part_1_student.c:260:5: warning: unused variable 'temp_store' [-Wunused-variable]
+  u8 temp_store;
+     ^~~~~~~~~~
+../src/lab_3_part_1_student.c:259:5: warning: unused variable 'termination_flag' [-Wunused-variable]
+  u8 termination_flag=0;
+     ^~~~~~~~~~~~~~~~
+'Finished building: ../src/lab_3_part_1_student.c'
+' '
+'Building target: part_1.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../part_1_bsp/ps7_cortexa9_0/lib -o "part_1.elf"  ./src/initialization.o ./src/lab_3_part_1_student.o   -Wl,--start-group,-lxil,-lfreertos,-lgcc,-lc,--end-group
+'Finished building target: part_1.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size part_1.elf  |tee "part_1.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  88740	   3416	  89632	 181788	  2c61c	part_1.elf
+'Finished building: part_1.elf.size'
+' '
+14:55:14 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.

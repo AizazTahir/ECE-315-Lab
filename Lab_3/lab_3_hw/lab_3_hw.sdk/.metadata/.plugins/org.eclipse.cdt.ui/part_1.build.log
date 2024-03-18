@@ -1,4 +1,8 @@
+14:55:14 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
 
-**** Build of configuration Debug for project part_1 ****
+14:55:14 Build Finished (took 252ms)
 
-Nothing to build for project part_1

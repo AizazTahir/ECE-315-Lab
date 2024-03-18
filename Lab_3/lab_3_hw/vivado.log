@@ -2,64 +2,53 @@
 # Vivado v2019.1 (64-bit)
 # SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
 # IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
-# Start of session at: Thu Feb 29 09:37:49 2024
-# Process ID: 16224
-# Current directory: C:/Users/ecetech/Desktop/lab_3_final.xpr/pmod_oled
-# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent16096 C:\Users\ecetech\Desktop\lab_3_final.xpr\pmod_oled\pmod_oled.xpr
-# Log file: C:/Users/ecetech/Desktop/lab_3_final.xpr/pmod_oled/vivado.log
-# Journal file: C:/Users/ecetech/Desktop/lab_3_final.xpr/pmod_oled\vivado.jou
+# Start of session at: Mon Mar 18 14:37:54 2024
+# Process ID: 5768
+# Current directory: C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent2948 C:\Users\matahir\Desktop\ECE-315-Lab\Lab_3\lab_3_hw\lab_3_hw.xpr
+# Log file: C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/vivado.log
+# Journal file: C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw\vivado.jou
 #-----------------------------------------------------------
 start_gui
-open_project C:/Users/ecetech/Desktop/lab_3_final.xpr/pmod_oled/pmod_oled.xpr
-INFO: [Project 1-313] Project file moved from 'C:/Users/andarala/Desktop/lab_3_final.xpr/pmod_oled/.Xil/Vivado-10648-e5-01-04/PrjAr/_X_' since last save.
+open_project C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.xpr
+INFO: [Project 1-313] Project file moved from 'C:/Users/ecetech/Desktop/lab_3_final.xpr/pmod_oled/.Xil/Vivado-16224-TECH-C98I8JRGUQ/PrjAr/_X_' since last save.
 Scanning sources...
 Finished scanning sources
 INFO: [IP_Flow 19-234] Refreshing IP repositories
-INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/ecetech/Desktop/lab_3_final.xpr/pmod_oled/pmod_oled.ipdefs/vivado-library-v2019.1-1_0_0_0_0_0'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.ipdefs/vivado-library-v2019.1-1_0_0_0_0_0_0'.
 INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
-open_project: Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 856.539 ; gain = 157.551
+open_project: Time (s): cpu = 00:00:14 ; elapsed = 00:00:13 . Memory (MB): peak = 742.320 ; gain = 121.523
 update_compile_order -fileset sources_1
-save_project_as lab_3_hw C:/Users/ecetech/Desktop/lab_3_final.xpr/lab_3_hw -exclude_run_results -force
-INFO: [Coretcl 2-133] re-setting run 'synth_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_xbar_0_synth_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_rst_ps7_0_50M_0_synth_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_processing_system7_0_0_synth_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_PmodOLED_0_0_synth_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_axi_gpio_0_1_synth_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_axi_gpio_0_2_synth_1'...
-INFO: [Coretcl 2-133] re-setting run 'impl_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_xbar_0_impl_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_rst_ps7_0_50M_0_impl_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_processing_system7_0_0_impl_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_PmodOLED_0_0_impl_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_axi_gpio_0_1_impl_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_axi_gpio_0_2_impl_1'...
-archive_project C:/Users/ecetech/Desktop/lab_3_final.xpr/lab_3_hw.xpr.zip -temp_dir C:/Users/ecetech/Desktop/lab_3_final.xpr/pmod_oled/.Xil/Vivado-16224-TECH-C98I8JRGUQ -force -include_config_settings
-INFO: [Coretcl 2-137] starting archive...
-INFO: [Coretcl 2-1499] Saving project copy to temporary location 'C:/Users/ecetech/Desktop/lab_3_final.xpr/pmod_oled/.Xil/Vivado-16224-TECH-C98I8JRGUQ' for archiving project
-Scanning sources...
-Finished scanning sources
-INFO: [IP_Flow 19-234] Refreshing IP repositories
-INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/ecetech/Desktop/lab_3_final.xpr/pmod_oled/pmod_oled.ipdefs/vivado-library-v2019.1-1_0_0_0_0_0'.
-INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
-INFO: [Coretcl 2-1211] Creating project copy for archival...
-INFO: [ProjectBase 1-495] The host OS only allows 260 characters in a normal path. The project is stored in a path with more than 80 characters. If you experience any problem with archiving the project, please consider setting environment variable $TEMP to a shorter path.
-Current project path is 'C:/Users/ecetech/Desktop/lab_3_final.xpr/pmod_oled/.Xil/Vivado-16224-TECH-C98I8JRGUQ/PrjAr/_X_'.
-INFO: [Coretcl 2-1213] Including run results for 'synth_1'
-INFO: [Coretcl 2-1213] Including run results for 'design_test_xbar_0_synth_1'
-INFO: [Coretcl 2-1213] Including run results for 'design_test_rst_ps7_0_50M_0_synth_1'
-INFO: [Coretcl 2-1213] Including run results for 'design_test_processing_system7_0_0_synth_1'
-INFO: [Coretcl 2-1213] Including run results for 'design_test_PmodOLED_0_0_synth_1'
-INFO: [Coretcl 2-1213] Including run results for 'design_test_axi_gpio_0_1_synth_1'
-INFO: [Coretcl 2-1213] Including run results for 'design_test_axi_gpio_0_2_synth_1'
-INFO: [Coretcl 2-1213] Including run results for 'impl_1'
-INFO: [Coretcl 2-133] re-setting run 'design_test_xbar_0_impl_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_rst_ps7_0_50M_0_impl_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_processing_system7_0_0_impl_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_PmodOLED_0_0_impl_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_axi_gpio_0_1_impl_1'...
-INFO: [Coretcl 2-133] re-setting run 'design_test_axi_gpio_0_2_impl_1'...
-INFO: [Coretcl 2-1212] Importing remotely added design sources and verilog include files (if any)...
-INFO: [filemgmt 20-334] All file(s) are already imported in fileset: 'constrs_1'
-INFO: [filemgmt 20-348] Importing the appropriate files for fileset: 'constrs_1'
-INFO: [filemgmt 20-348] Importing the appropriate files for fileset: 'sources_1'
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+[Mon Mar 18 14:38:43 2024] Launched synth_1...
+Run output will be captured here: C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.runs/synth_1/runme.log
+[Mon Mar 18 14:38:44 2024] Launched impl_1...
+Run output will be captured here: C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:00:07 ; elapsed = 00:00:05 . Memory (MB): peak = 769.598 ; gain = 0.000
+open_run impl_1
+INFO: [Device 21-403] Loading part xc7z010clg400-1
+INFO: [Netlist 29-17] Analyzing 38 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2019.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF File: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.510 . Memory (MB): peak = 1672.215 ; gain = 0.000
+Restored from archive | CPU: 0.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.511 . Memory (MB): peak = 1672.215 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1672.215 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 20 instances were transformed.
+  IOBUF => IOBUF (IBUF, OBUFT): 16 instances
+  RAM32M => RAM32M (RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMS32, RAMS32): 4 instances
+
+open_run: Time (s): cpu = 00:00:27 ; elapsed = 00:00:23 . Memory (MB): peak = 1796.051 ; gain = 1021.188
+launch_sdk -workspace C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk -hwspec C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/design_test_wrapper.hdf
+INFO: [Vivado 12-393] Launching SDK...
+INFO: [Vivado 12-417] Running xsdk -workspace C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk -hwspec C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/design_test_wrapper.hdf
+INFO: [Vivado 12-3157] SDK launch initiated. Please check console for any further messages.

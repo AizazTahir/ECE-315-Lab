@@ -29854,3 +29854,9 @@ con
 16:01:12 INFO  : Successfully done setting XSCT server connection channel  
 16:01:12 INFO  : Successfully done setting SDK workspace  
 16:01:12 INFO  : Processing command line option -hwspec C:/Users/andarala/Desktop/lab_3_final.xpr/pmod_oled/pmod_oled.sdk/design_test_wrapper.hdf.
+14:42:24 INFO  : Registering command handlers for SDK TCF services
+14:42:26 INFO  : Launching XSCT server: xsct.bat -interactive C:\Users\matahir\Desktop\ECE-315-Lab\Lab_3\lab_3_hw\lab_3_hw.sdk\temp_xsdb_launch_script.tcl
+14:42:30 INFO  : XSCT server has started successfully.
+14:42:30 INFO  : Successfully done setting XSCT server connection channel  
+14:42:34 INFO  : Successfully done setting SDK workspace  
+14:42:34 INFO  : Processing command line option -hwspec C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/design_test_wrapper.hdf.

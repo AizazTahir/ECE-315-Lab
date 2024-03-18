@@ -169,7 +169,11 @@ static void vUartManagerTask( void *pvParameters ){
 
 	while(1){
 		if(flag==1){ 						// flag is set to 1 when the user enters the end sequence on SPI1-SPI0 mode
-			int loop_counter = str_length; 	// loop count for sending the dummy char
+			int loop_counter = str_length; 	// loop count for sending the dummy char gets assigned by spi sub task
+
+			// Send a "dummy" control character to tell the slave to start sending data (number of bytes: )
+				xQueueSendToBack(xQueue_FIFO1, &dummy, 0UL);
+
 			for(int i = 0; i < loop_counter; i++){
 
 				/*******************************************/
@@ -179,6 +183,23 @@ static void vUartManagerTask( void *pvParameters ){
                 // 3. Check if the UART transmitter (XUartPs) is ready to send data. If it's full, wait until there is space.
                 // 4. Receive bytes until a null character ('\0') is received, use the UART write function
                 //    to send the received byte to the UART. Refer to the XUartPs_WriteReg function with the appropriate parameters.
+
+
+
+				// Await incoming bytes from the SPIMain task via FIFO2 using xQueueReceive with portMAX_DELAY
+				xQueueReceive(xQueue_FIFO2, &task1_receive_from_FIFO2, portMAX_DELAY);
+
+				// Check if the task1_receive_from_FIFO2 is a null character
+				if(task1_receive_from_FIFO2 == '\0'){
+					break;
+				}
+					// Check if the UART transmitter (XUartPs) is ready to send data. If it's full, wait until there is space
+				while (XUartPs_IsTransmitFull(XPAR_XUARTPS_0_BASEADDR) == TRUE);
+				
+				// Receive bytes until a null character ('\0') is received, use the UART write function
+				// to send the received byte to the UART. Refer to the XUartPs_WriteReg function with the appropriate parameters.
+				XUartPs_WriteReg(XPAR_XUARTPS_0_BASEADDR, XUARTPS_FIFO_OFFSET, task1_receive_from_FIFO2);
+
 
 				/*******************************************/
 			}
@@ -204,7 +225,15 @@ static void vUartManagerTask( void *pvParameters ){
                         // receive the data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"
                         // If there is space in the UART transmitter, write the byte to the UART
 						// receive data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"
+						
+						// Receive the data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"
+						xQueueReceive(xQueue_FIFO2, &task1_receive_from_FIFO2_spi_data, portMAX_DELAY);
 
+						// If there is space in the UART transmitter, write the byte to the UART
+						while (XUartPs_IsTransmitFull(XPAR_XUARTPS_0_BASEADDR) == TRUE);
+						XUartPs_WriteReg(XPAR_XUARTPS_0_BASEADDR, XUARTPS_FIFO_OFFSET, task1_receive_from_FIFO2_spi_data);
+						
+						checkTerminationSequence();
 	                    /*******************************************/
                     }
 				}
@@ -247,6 +276,32 @@ static void vSpiMainTask( void *pvParameters ){
                 //    d. Send the received byte back through FIFO2.
                 //    e. Reset received_bytes counter to prepare for the next message.
 
+				// Copy the received data from the FIFO1 into "send_buffer" variable
+				send_buffer[0] = received_from_FIFO1;
+				
+				// Increment the received_bytes counter for each byte received
+				received_bytes++;
+
+				// Check if received_bytes matches TRANSFER_SIZE_IN_BYTES
+				if(received_bytes == TRANSFER_SIZE_IN_BYTES){
+					// Transmit the collected bytes via SPI
+					XSpiPs_SetSlaveSelect(&spiInstMaster, 0); /// COULD BE CAUSE OF ERROR
+					// Transmit the collected bytes via SPI
+					XSpiPs_PolledTransfer(&spiInstMaster, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
+					
+
+					// Yield the task to allow for SPI communication processing
+					taskYIELD();
+					// Read the response back from SPI
+					XSpiPs_PolledTransfer(&spiInstMaster, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
+					// Send the received byte back through FIFO2
+					xQueueSendToBack(xQueue_FIFO2, &send_buffer[0], 0UL);
+					// Reset received_bytes counter to prepare for the next message
+					received_bytes = 0;
+				}
+
+				
+
                 /*******************************************/
 			}
 		}
@@ -258,6 +313,7 @@ static void vSpiMainTask( void *pvParameters ){
 static void vSpiSubTask( void *pvParameters ){
 	u8 termination_flag=0;
 	u8 temp_store;
+    int message_counter = 0; // Initialize message counter
 	int spi_rx_bytes = 0;
 	char buffer[150];
 
@@ -278,6 +334,45 @@ static void vSpiSubTask( void *pvParameters ){
 			//    a. Construct the message string with the total number of bytes and messages received.
 			//    b. Loop through the message string and send it back to the SPI master using the appropriate SpiSlave write function.
 
+			// Detect the termination sequence (\r%\r) and set the TERMINATION_FLAG to 3 upon successful detection
+			if (termination_flag == 2 && temp_store == CHAR_CARRIAGE_RETURN){
+				termination_flag = 3;
+			} else if (termination_flag == 1 && temp_store == CHAR_PERCENT){
+				termination_flag = 2;
+			} else if (temp_store == CHAR_CARRIAGE_RETURN){
+				termination_flag = 1;
+			} else {
+				termination_flag = 0;
+			}
+
+			// Continuously track:
+			// a. The number of characters received over SPI.
+			// b. The number of complete messages received so far.
+			spi_rx_bytes++;
+
+			// Receive bytes until a null character ('\0') is 
+			
+			// Utilize SpiSlave read and write functions from the driver file for SPI communication.
+			// Use "RxBuffer_Slave" for reading data from the SPI slave node.
+			XSpiPs_PolledTransfer(&spiInstSlave, &temp_store, &temp_store, 1);
+
+
+
+			// Upon receiving the termination sequence:
+			// a. Construct the message string with the total number of bytes and messages received.
+			// b. Loop through the message string and send it back to the SPI master using the appropriate SpiSlave write function.
+			if (termination_flag == 3){
+				message_counter++;
+				sprintf(buffer, "\nNumber of bytes received over SPI:%d\nTotal messages received: %d\n", spi_rx_bytes, message_counter);
+				for (int i = 0; i < strlen(buffer); i++){
+					XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+				}
+				termination_flag = 0;
+				spi_rx_bytes = 0;
+				message_counter = 0;
+			}
+		
+
 			/*******************************************/
 		}
 		vTaskDelay(1);
@@ -297,6 +392,8 @@ void checkTerminationSequence(void){
 
 	if(uart_byte == CHAR_CARRIAGE_RETURN && sequence_flag==2){
 		sequence_flag += 1;
+		 
+		
 	}
 	else if(uart_byte == CHAR_PERCENT && sequence_flag==1){
 		sequence_flag += 1;
@@ -311,6 +408,7 @@ void checkTerminationSequence(void){
 		sequence_flag = 0;
 		spi_loopback = 0;
 		uart_loopback = 0;
+		flag = 1;
 		xil_printf("\n*** Text entry ended using termination sequence ***\r\n");
 	}
 }

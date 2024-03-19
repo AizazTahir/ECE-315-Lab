@@ -236,3 +236,30 @@ selectButton(RDIResource.BaseDialog_OK, "OK"); // a (aa)
 dismissDialog("Launch SDK"); // aa (cl)
 // Tcl Message: launch_sdk -workspace C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk -hwspec C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/design_test_wrapper.hdf 
 // Tcl Message: INFO: [Vivado 12-393] Launching SDK... INFO: [Vivado 12-417] Running xsdk -workspace C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk -hwspec C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.sdk/design_test_wrapper.hdf INFO: [Vivado 12-3157] SDK launch initiated. Please check console for any further messages. 
+// HMemoryUtils.trashcanNow. Engine heap size: 1,756 MB. GUI used memory: 97 MB. Current time: 3/18/24, 3:11:23 PM MDT
+// Elapsed time: 1359 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, IP Integrator, Open Block Design]", 7, false); // u (O, cl)
+// Run Command: PAResourceCommand.PACommandNames_OPEN_BLOCK_DESIGN
+// by (cl):  Open Block Design : addNotify
+// TclEventType: LOAD_FEATURE
+// Tcl Message: open_bd_design {C:/Users/matahir/Desktop/ECE-315-Lab/Lab_3/lab_3_hw/lab_3_hw.srcs/sources_1/bd/design_test/design_test.bd} 
+// TclEventType: RSB_CHANGE_CURRENT_DIAGRAM
+// TclEventType: RSB_PROPERTY_CHANGE
+// TclEventType: LOAD_FEATURE
+// TclEventType: RSB_PROPERTY_CHANGE
+// TclEventType: RSB_OPEN_DIAGRAM
+// WARNING: HEventQueue.dispatchEvent() is taking  2436 ms.
+// TclEventType: RSB_CONNECTION_CHANGE
+// Elapsed time: 12 seconds
+closeView(PAResourceOtoP.PAViews_PROJECT_SUMMARY, "Project Summary"); // v
+// TclEventType: RSB_LOCK_CHANGE
+// Tcl Message: open_bd_design: Time (s): cpu = 00:00:09 ; elapsed = 00:00:12 . Memory (MB): peak = 1868.449 ; gain = 50.902 
+// 'bB' command handler elapsed time: 12 seconds
+dismissDialog("Open Block Design"); // by (cl)
+selectCodeEditor(RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR, 1244, 41); // dt (af, cl)
+// HMemoryUtils.trashcanNow. Engine heap size: 1,756 MB. GUI used memory: 95 MB. Current time: 3/18/24, 3:41:24 PM MDT
+// HMemoryUtils.trashcanNow. Engine heap size: 1,756 MB. GUI used memory: 95 MB. Current time: 3/18/24, 4:11:24 PM MDT
+// HMemoryUtils.trashcanNow. Engine heap size: 1,756 MB. GUI used memory: 93 MB. Current time: 3/18/24, 4:41:24 PM MDT
+// HMemoryUtils.trashcanNow. Engine heap size: 1,756 MB. GUI used memory: 93 MB. Current time: 3/18/24, 5:11:25 PM MDT
+// HMemoryUtils.trashcanNow. Engine heap size: 1,756 MB. GUI used memory: 93 MB. Current time: 3/18/24, 5:41:25 PM MDT
+// HMemoryUtils.trashcanNow. Engine heap size: 1,756 MB. GUI used memory: 92 MB. Current time: 3/18/24, 6:11:25 PM MDT

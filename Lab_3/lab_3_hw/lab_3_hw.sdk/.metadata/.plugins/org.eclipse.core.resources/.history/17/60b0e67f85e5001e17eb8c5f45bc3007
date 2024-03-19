@@ -212,8 +212,6 @@ static void vUartManagerTask( void *pvParameters ){
 
 				if(uart_loopback == 1 && command_flag == 1){
 					XUartPs_SendByte(XPAR_XUARTPS_0_BASEADDR, uart_byte);
-					xil_printf("hellooooo");
-
 					checkTerminationSequence();
 				} else if(command_flag == 2){
 					xQueueSendToBack(xQueue_FIFO1, &uart_byte, 0UL);
@@ -222,8 +220,6 @@ static void vUartManagerTask( void *pvParameters ){
 						xQueueReceive(xQueue_FIFO2, &task1_receive_from_FIFO2, portMAX_DELAY);
 						while (XUartPs_IsTransmitFull(XPAR_XUARTPS_0_BASEADDR) == TRUE);
 						XUartPs_WriteReg(XPAR_XUARTPS_0_BASEADDR, XUARTPS_FIFO_OFFSET, task1_receive_from_FIFO2);
-						xil_printf("hello");
-
 						checkTerminationSequence();
 					} else if(spi_loopback == 0){
                         /*******************************************/

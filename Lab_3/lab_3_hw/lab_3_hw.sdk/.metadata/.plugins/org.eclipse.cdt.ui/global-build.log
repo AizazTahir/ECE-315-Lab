@@ -53031,3 +53031,758 @@ arm-none-eabi-size part_1.elf  |tee "part_1.elf.size"
   88740	   3416	  89632	 181788	  2c61c	part_1.elf
 'Finished building: part_1.elf.size'
 ' '
+17:56:38 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:288:29: error: 'spiInstMaster' undeclared (first use in this function)
+      XSpiPs_SetSlaveSelect(&spiInstMaster, 0); /// COULD BE CAUSE OF ERROR
+                             ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:288:29: note: each undeclared identifier is reported only once for each function it appears in
+../src/lab_3_part_1_student.c:251:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../src/lab_3_part_1_student.c:357:27: error: 'spiInstSlave' undeclared (first use in this function)
+    XSpiPs_PolledTransfer(&spiInstSlave, &temp_store, &temp_store, 1);
+                           ^~~~~~~~~~~~
+../src/lab_3_part_1_student.c:368:43: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                           ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:368:55: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                                       ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+make: *** [src/subdir.mk:26: src/lab_3_part_1_student.o] Error 1
+17:56:44 **** Incremental Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:288:29: error: 'spiInstMaster' undeclared (first use in this function)
+      XSpiPs_SetSlaveSelect(&spiInstMaster, 0); /// COULD BE CAUSE OF ERROR
+                             ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:288:29: note: each undeclared identifier is reported only once for each function it appears in
+../src/lab_3_part_1_student.c:251:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../src/lab_3_part_1_student.c:357:27: error: 'spiInstSlave' undeclared (first use in this function)
+    XSpiPs_PolledTransfer(&spiInstSlave, &temp_store, &temp_store, 1);
+                           ^~~~~~~~~~~~
+../src/lab_3_part_1_student.c:368:43: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                           ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:368:55: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                                       ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+make: *** [src/subdir.mk:26: src/lab_3_part_1_student.o] Error 1
+18:00:16 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:288:29: error: 'spiInstMaster' undeclared (first use in this function)
+      XSpiPs_SetSlaveSelect(&spiInstMaster, 0); /// COULD BE CAUSE OF ERROR
+                             ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:288:29: note: each undeclared identifier is reported only once for each function it appears in
+../src/lab_3_part_1_student.c:251:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../src/lab_3_part_1_student.c:358:27: error: 'spiInstSlave' undeclared (first use in this function)
+    XSpiPs_PolledTransfer(&spiInstSlave, &temp_store, &temp_store, 1);
+                           ^~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:43: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                           ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:55: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                                       ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+make: *** [src/subdir.mk:26: src/lab_3_part_1_student.o] Error 1
+18:00:19 **** Incremental Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:288:29: error: 'spiInstMaster' undeclared (first use in this function)
+      XSpiPs_SetSlaveSelect(&spiInstMaster, 0); /// COULD BE CAUSE OF ERROR
+                             ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:288:29: note: each undeclared identifier is reported only once for each function it appears in
+../src/lab_3_part_1_student.c:251:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../src/lab_3_part_1_student.c:358:27: error: 'spiInstSlave' undeclared (first use in this function)
+    XSpiPs_PolledTransfer(&spiInstSlave, &temp_store, &temp_store, 1);
+                           ^~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:43: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                           ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:55: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                                       ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+make: *** [src/subdir.mk:26: src/lab_3_part_1_student.o] Error 1
+18:04:11 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:288:28: error: lvalue required as unary '&' operand
+      XSpiPs_SetSlaveSelect(&XPAR_XSPIPS_0_DEVICE_ID, 0); /// COULD BE CAUSE OF ERROR
+                            ^
+../src/lab_3_part_1_student.c:291:29: error: 'spiInstMaster' undeclared (first use in this function)
+      XSpiPs_PolledTransfer(&spiInstMaster, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
+                             ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:291:29: note: each undeclared identifier is reported only once for each function it appears in
+../src/lab_3_part_1_student.c:251:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../src/lab_3_part_1_student.c:358:27: error: 'spiInstSlave' undeclared (first use in this function)
+    XSpiPs_PolledTransfer(&spiInstSlave, &temp_store, &temp_store, 1);
+                           ^~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:43: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                           ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:55: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                                       ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+make: *** [src/subdir.mk:26: src/lab_3_part_1_student.o] Error 1
+18:04:20 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:291:29: error: 'spiInstMaster' undeclared (first use in this function)
+      XSpiPs_PolledTransfer(&spiInstMaster, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
+                             ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:291:29: note: each undeclared identifier is reported only once for each function it appears in
+../src/lab_3_part_1_student.c:251:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../src/lab_3_part_1_student.c:358:27: error: 'spiInstSlave' undeclared (first use in this function)
+    XSpiPs_PolledTransfer(&spiInstSlave, &temp_store, &temp_store, 1);
+                           ^~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:43: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                           ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:55: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                                       ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+make: *** [src/subdir.mk:26: src/lab_3_part_1_student.o] Error 1
+18:04:34 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:297:29: error: 'spiInstMaster' undeclared (first use in this function)
+      XSpiPs_PolledTransfer(&spiInstMaster, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
+                             ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:297:29: note: each undeclared identifier is reported only once for each function it appears in
+../src/lab_3_part_1_student.c:251:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../src/lab_3_part_1_student.c:358:27: error: 'spiInstSlave' undeclared (first use in this function)
+    XSpiPs_PolledTransfer(&spiInstSlave, &temp_store, &temp_store, 1);
+                           ^~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:43: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                           ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:55: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                                       ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+make: *** [src/subdir.mk:26: src/lab_3_part_1_student.o] Error 1
+18:04:41 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:251:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../src/lab_3_part_1_student.c:358:27: error: 'spiInstSlave' undeclared (first use in this function)
+    XSpiPs_PolledTransfer(&spiInstSlave, &temp_store, &temp_store, 1);
+                           ^~~~~~~~~~~~
+../src/lab_3_part_1_student.c:358:27: note: each undeclared identifier is reported only once for each function it appears in
+../src/lab_3_part_1_student.c:369:43: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                           ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:55: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                                       ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+make: *** [src/subdir.mk:26: src/lab_3_part_1_student.o] Error 1
+18:05:26 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:251:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:33,
+                 from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:402:34: warning: passing argument 1 of 'XSpiPs_PolledTransfer' makes pointer from integer without a cast [-Wint-conversion]
+ #define XPAR_PS7_SPI_1_DEVICE_ID 1
+                                  ^
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:417:33: note: in expansion of macro 'XPAR_PS7_SPI_1_DEVICE_ID'
+ #define XPAR_XSPIPS_1_DEVICE_ID XPAR_PS7_SPI_1_DEVICE_ID
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:358:26: note: in expansion of macro 'XPAR_XSPIPS_1_DEVICE_ID'
+    XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &temp_store, &temp_store, 1);
+                          ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:35: note: expected 'XSpiPs *' {aka 'struct <anonymous> *'} but argument is of type 'int'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+                           ~~~~~~~~^~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:29: error: 'spiInstSlave' undeclared (first use in this function)
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                             ^~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:29: note: each undeclared identifier is reported only once for each function it appears in
+../src/lab_3_part_1_student.c:369:43: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                           ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:55: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                                       ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+make: *** [src/subdir.mk:26: src/lab_3_part_1_student.o] Error 1
+18:05:34 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:251:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:33,
+                 from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:402:34: warning: passing argument 1 of 'XSpiPs_PolledTransfer' makes pointer from integer without a cast [-Wint-conversion]
+ #define XPAR_PS7_SPI_1_DEVICE_ID 1
+                                  ^
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:417:33: note: in expansion of macro 'XPAR_PS7_SPI_1_DEVICE_ID'
+ #define XPAR_XSPIPS_1_DEVICE_ID XPAR_PS7_SPI_1_DEVICE_ID
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:358:26: note: in expansion of macro 'XPAR_XSPIPS_1_DEVICE_ID'
+    XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &temp_store, &temp_store, 1);
+                          ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:35: note: expected 'XSpiPs *' {aka 'struct <anonymous> *'} but argument is of type 'int'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+                           ~~~~~~~~^~~~~~~~~~~
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:33,
+                 from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:402:34: warning: passing argument 1 of 'XSpiPs_PolledTransfer' makes pointer from integer without a cast [-Wint-conversion]
+ #define XPAR_PS7_SPI_1_DEVICE_ID 1
+                                  ^
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:417:33: note: in expansion of macro 'XPAR_PS7_SPI_1_DEVICE_ID'
+ #define XPAR_XSPIPS_1_DEVICE_ID XPAR_PS7_SPI_1_DEVICE_ID
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:28: note: in expansion of macro 'XPAR_XSPIPS_1_DEVICE_ID'
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                            ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:35: note: expected 'XSpiPs *' {aka 'struct <anonymous> *'} but argument is of type 'int'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+                           ~~~~~~~~^~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:53: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                                                     ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:369:65: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                                                                 ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+'Finished building: ../src/lab_3_part_1_student.c'
+' '
+'Building target: part_1.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../part_1_bsp/ps7_cortexa9_0/lib -o "part_1.elf"  ./src/initialization.o ./src/lab_3_part_1_student.o   -Wl,--start-group,-lxil,-lfreertos,-lgcc,-lc,--end-group
+'Finished building target: part_1.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size part_1.elf  |tee "part_1.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  89588	   3416	  89632	 182636	  2c96c	part_1.elf
+'Finished building: part_1.elf.size'
+' '
+18:05:54 **** Incremental Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+18:07:29 **** Incremental Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+18:07:58 **** Incremental Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+18:11:12 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:255:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:33,
+                 from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:402:34: warning: passing argument 1 of 'XSpiPs_PolledTransfer' makes pointer from integer without a cast [-Wint-conversion]
+ #define XPAR_PS7_SPI_1_DEVICE_ID 1
+                                  ^
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:417:33: note: in expansion of macro 'XPAR_PS7_SPI_1_DEVICE_ID'
+ #define XPAR_XSPIPS_1_DEVICE_ID XPAR_PS7_SPI_1_DEVICE_ID
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:362:26: note: in expansion of macro 'XPAR_XSPIPS_1_DEVICE_ID'
+    XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &temp_store, &temp_store, 1);
+                          ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:35: note: expected 'XSpiPs *' {aka 'struct <anonymous> *'} but argument is of type 'int'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+                           ~~~~~~~~^~~~~~~~~~~
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:33,
+                 from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:402:34: warning: passing argument 1 of 'XSpiPs_PolledTransfer' makes pointer from integer without a cast [-Wint-conversion]
+ #define XPAR_PS7_SPI_1_DEVICE_ID 1
+                                  ^
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:417:33: note: in expansion of macro 'XPAR_PS7_SPI_1_DEVICE_ID'
+ #define XPAR_XSPIPS_1_DEVICE_ID XPAR_PS7_SPI_1_DEVICE_ID
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:373:28: note: in expansion of macro 'XPAR_XSPIPS_1_DEVICE_ID'
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                            ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:35: note: expected 'XSpiPs *' {aka 'struct <anonymous> *'} but argument is of type 'int'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+                           ~~~~~~~~^~~~~~~~~~~
+../src/lab_3_part_1_student.c:373:53: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                                                     ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:373:65: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                                                                 ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+'Finished building: ../src/lab_3_part_1_student.c'
+' '
+'Building target: part_1.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../part_1_bsp/ps7_cortexa9_0/lib -o "part_1.elf"  ./src/initialization.o ./src/lab_3_part_1_student.o   -Wl,--start-group,-lxil,-lfreertos,-lgcc,-lc,--end-group
+'Finished building target: part_1.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size part_1.elf  |tee "part_1.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  89676	   3416	  89632	 182724	  2c9c4	part_1.elf
+'Finished building: part_1.elf.size'
+' '
+18:11:13 **** Incremental Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+18:13:23 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:257:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:33,
+                 from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:402:34: warning: passing argument 1 of 'XSpiPs_PolledTransfer' makes pointer from integer without a cast [-Wint-conversion]
+ #define XPAR_PS7_SPI_1_DEVICE_ID 1
+                                  ^
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:417:33: note: in expansion of macro 'XPAR_PS7_SPI_1_DEVICE_ID'
+ #define XPAR_XSPIPS_1_DEVICE_ID XPAR_PS7_SPI_1_DEVICE_ID
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:364:26: note: in expansion of macro 'XPAR_XSPIPS_1_DEVICE_ID'
+    XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &temp_store, &temp_store, 1);
+                          ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:35: note: expected 'XSpiPs *' {aka 'struct <anonymous> *'} but argument is of type 'int'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+                           ~~~~~~~~^~~~~~~~~~~
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:33,
+                 from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:402:34: warning: passing argument 1 of 'XSpiPs_PolledTransfer' makes pointer from integer without a cast [-Wint-conversion]
+ #define XPAR_PS7_SPI_1_DEVICE_ID 1
+                                  ^
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:417:33: note: in expansion of macro 'XPAR_PS7_SPI_1_DEVICE_ID'
+ #define XPAR_XSPIPS_1_DEVICE_ID XPAR_PS7_SPI_1_DEVICE_ID
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:375:28: note: in expansion of macro 'XPAR_XSPIPS_1_DEVICE_ID'
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                            ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:35: note: expected 'XSpiPs *' {aka 'struct <anonymous> *'} but argument is of type 'int'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+                           ~~~~~~~~^~~~~~~~~~~
+../src/lab_3_part_1_student.c:375:53: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                                                     ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:375:65: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                                                                 ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+'Finished building: ../src/lab_3_part_1_student.c'
+' '
+'Building target: part_1.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../part_1_bsp/ps7_cortexa9_0/lib -o "part_1.elf"  ./src/initialization.o ./src/lab_3_part_1_student.o   -Wl,--start-group,-lxil,-lfreertos,-lgcc,-lc,--end-group
+'Finished building target: part_1.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size part_1.elf  |tee "part_1.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  89692	   3416	  89632	 182740	  2c9d4	part_1.elf
+'Finished building: part_1.elf.size'
+' '
+18:13:24 **** Incremental Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+18:13:28 **** Incremental Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+18:15:32 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:259:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:33,
+                 from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:402:34: warning: passing argument 1 of 'XSpiPs_PolledTransfer' makes pointer from integer without a cast [-Wint-conversion]
+ #define XPAR_PS7_SPI_1_DEVICE_ID 1
+                                  ^
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:417:33: note: in expansion of macro 'XPAR_PS7_SPI_1_DEVICE_ID'
+ #define XPAR_XSPIPS_1_DEVICE_ID XPAR_PS7_SPI_1_DEVICE_ID
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:366:26: note: in expansion of macro 'XPAR_XSPIPS_1_DEVICE_ID'
+    XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &temp_store, &temp_store, 1);
+                          ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:35: note: expected 'XSpiPs *' {aka 'struct <anonymous> *'} but argument is of type 'int'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+                           ~~~~~~~~^~~~~~~~~~~
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:33,
+                 from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:402:34: warning: passing argument 1 of 'XSpiPs_PolledTransfer' makes pointer from integer without a cast [-Wint-conversion]
+ #define XPAR_PS7_SPI_1_DEVICE_ID 1
+                                  ^
+../../part_1_bsp/ps7_cortexa9_0/include/xparameters.h:417:33: note: in expansion of macro 'XPAR_PS7_SPI_1_DEVICE_ID'
+ #define XPAR_XSPIPS_1_DEVICE_ID XPAR_PS7_SPI_1_DEVICE_ID
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:377:28: note: in expansion of macro 'XPAR_XSPIPS_1_DEVICE_ID'
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                            ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:35: note: expected 'XSpiPs *' {aka 'struct <anonymous> *'} but argument is of type 'int'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+                           ~~~~~~~~^~~~~~~~~~~
+../src/lab_3_part_1_student.c:377:53: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                                                     ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:377:65: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+                                                                 ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+'Finished building: ../src/lab_3_part_1_student.c'
+' '
+'Building target: part_1.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../part_1_bsp/ps7_cortexa9_0/lib -o "part_1.elf"  ./src/initialization.o ./src/lab_3_part_1_student.o   -Wl,--start-group,-lxil,-lfreertos,-lgcc,-lc,--end-group
+'Finished building target: part_1.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size part_1.elf  |tee "part_1.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  89692	   3416	  89632	 182740	  2c9d4	part_1.elf
+'Finished building: part_1.elf.size'
+' '
+18:15:34 **** Incremental Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.

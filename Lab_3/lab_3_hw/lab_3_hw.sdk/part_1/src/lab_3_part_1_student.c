@@ -232,7 +232,7 @@ static void vUartManagerTask( void *pvParameters ){
                         // receive the data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"
                         // If there is space in the UART transmitter, write the byte to the UART
 						// receive data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"
-						xil_printf("inside Spi == 0");
+
 
 						
 						// Receive the data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"
@@ -285,7 +285,7 @@ static void vSpiMainTask( void *pvParameters ){
                 //    d. Send the received byte back through FIFO2.
                 //    e. Reset received_bytes counter to prepare for the next message.
 
-				xil_printf("In SPI Main spi_loopback == 0");
+
 
 
 				// Copy the received data from the FIFO1 into "send_buffer" variable
@@ -294,25 +294,33 @@ static void vSpiMainTask( void *pvParameters ){
 				// Increment the received_bytes counter for each byte received
 				received_bytes++;
 
+
+
 				// Check if received_bytes matches TRANSFER_SIZE_IN_BYTES
 				if(received_bytes == TRANSFER_SIZE_IN_BYTES){
+
+
+
 					// Transmit the collected bytes via SPI
-					XSpiPs_SetSlaveSelect(XPAR_XSPIPS_0_DEVICE_ID, 0); /// COULD BE CAUSE OF ERROR
-					xil_printf("In SPI Main \n");
-					// Transmit the collected bytes via SPI
-					XSpiPs_PolledTransfer(XPAR_XSPIPS_0_DEVICE_ID, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
-					
+					spiMasterWrite(send_buffer, TRANSFER_SIZE_IN_BYTES);
 
 					// Yield the task to allow for SPI communication processing
 					taskYIELD();
+
 					// Read the response back from SPI
-					XSpiPs_PolledTransfer(XPAR_XSPIPS_0_DEVICE_ID, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
-					xil_printf("Successfully read from the SLAVE");
+					spiMasterRead(TRANSFER_SIZE_IN_BYTES);
+
+
 
 					// Send the received byte back through FIFO2
-					xQueueSendToBack(xQueue_FIFO2, &send_buffer[0], 0UL);
+					xQueueSendToBack(xQueue_FIFO2, &RxBuffer_Master[0], 0UL);
+
+					// Reset the received_bytes counter to prepare for the next message
 					received_bytes = 0;
+
 				}
+
+
 
 				
 
@@ -331,6 +339,8 @@ static void vSpiSubTask( void *pvParameters ){
 	int spi_rx_bytes = 0;
 	char buffer[150];
 
+
+
 	while(1){
         if(spi_loopback==0 && command_flag==2){
 			/*******************************************/
@@ -348,44 +358,50 @@ static void vSpiSubTask( void *pvParameters ){
 			//    a. Construct the message string with the total number of bytes and messages received.
 			//    b. Loop through the message string and send it back to the SPI master using the appropriate SpiSlave write function.
 
+        	// Reads the spi input
+        	spiSlaveRead(TRANSFER_SIZE_IN_BYTES);
+
+        	temp_store = RxBuffer_Slave[0];
+
 			// Detect the termination sequence (\r%\r) and set the TERMINATION_FLAG to 3 upon successful detection
-			if (termination_flag == 2 && temp_store == CHAR_CARRIAGE_RETURN){
-				termination_flag = 3;
-			} else if (termination_flag == 1 && temp_store == CHAR_PERCENT){
-				termination_flag = 2;
-			} else if (temp_store == CHAR_CARRIAGE_RETURN){
-				termination_flag = 1;
-			} else {
-				termination_flag = 0;
-			}
-
-			// Continuously track:
-			// a. The number of characters received over SPI.
-			// b. The number of complete messages received so far.
-			spi_rx_bytes++;
-
-			// Receive bytes until a null character ('\0') is 
-			
-			// Utilize SpiSlave read and write functions from the driver file for SPI communication.
-			// Use "RxBuffer_Slave" for reading data from the SPI slave node.
-			XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &temp_store, &temp_store, 1);
-
-
-
-			// Upon receiving the termination sequence:
-			// a. Construct the message string with the total number of bytes and messages received.
-			// b. Loop through the message string and send it back to the SPI master using the appropriate SpiSlave write function.
-			if (termination_flag == 3){
-				message_counter++;
-				sprintf(buffer, "\nNumber of bytes received over SPI:%d\nTotal messages received: %d\n", spi_rx_bytes, message_counter);
-				for (int i = 0; i < strlen(buffer); i++){
-					XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+        	if (termination_flag == 2 && temp_store == CHAR_CARRIAGE_RETURN){
+					termination_flag = 3;
+				} else if (termination_flag == 1 && temp_store == CHAR_PERCENT){
+					termination_flag = 2;
+				} else if (temp_store == CHAR_CARRIAGE_RETURN){
+					termination_flag = 1;
+				} else {
+					termination_flag = 0;
+					// Immediately return the character back to the SPI master if it's not part of the termination sequence
+					spiSlaveWrite(&temp_store, 1);
 				}
-				termination_flag = 0;
-				spi_rx_bytes = 0;
-				message_counter = 0;
-			}
-		
+
+				// Update bytes read
+				spi_rx_bytes++;
+
+
+				// Upon receiving the termination sequence:
+				// a. Construct the message string with the total number of bytes and messages received.
+				// b. Loop through the message string and send it back to the SPI master using the appropriate SpiSlave write function.
+				if (termination_flag == 3){
+
+					xil_printf("\n Inside of termination sequence slave\n");
+
+					message_counter++;
+					// Construct messgae
+					sprintf(buffer, "\nNumber of bytes received over SPI:%d\nTotal messages received: %d\n", spi_rx_bytes, message_counter);
+
+					// Loop through message to send it back
+					for (int i = 0; i < strlen(buffer); i++){
+						// Send the summary message back to the SPI master
+						spiSlaveWrite((u8*)buffer, strlen(buffer)); // Use spiSlaveWrite to send buffer
+					}
+
+					termination_flag = 0;
+					spi_rx_bytes = 0;
+					message_counter = 0;
+				}
+
 
 			/*******************************************/
 		}

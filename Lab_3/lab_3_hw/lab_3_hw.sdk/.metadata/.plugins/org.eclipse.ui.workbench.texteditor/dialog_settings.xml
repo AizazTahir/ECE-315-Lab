@@ -6,18 +6,20 @@
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="LineTo" key="selection"/>
+		<item value="Slave" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="slave"/>
+			<item value="started"/>
+			<item value="xil"/>
 			<item value="lineto"/>
 			<item value="pixel"/>
 			<item value="grph"/>
 			<item value="mode"/>
 			<item value="max"/>
-			<item value="myDevice"/>
 		</list>
 		<list key="replacehistory">
 			<item value="oledDevice"/>

@@ -54081,3 +54081,71 @@ arm-none-eabi-size part_1.elf  |tee "part_1.elf.size"
   89716	   3416	  89632	 182764	  2c9ec	part_1.elf
 'Finished building: part_1.elf.size'
 ' '
+14:45:03 **** Auto Build of configuration Debug for project part_1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/lab_3_part_1_student.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/lab_3_part_1_student.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../part_1_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/lab_3_part_1_student.d" -MT"src/lab_3_part_1_student.o" -o "src/lab_3_part_1_student.o" "../src/lab_3_part_1_student.c"
+In file included from ../src/lab_3_part_1_student.c:64:
+../src/initialization.h:50: warning: "configGENERATE_RUN_TIME_STATS" redefined
+ #define configGENERATE_RUN_TIME_STATS 1
+ 
+In file included from ../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOS.h:56,
+                 from ../src/lab_3_part_1_student.c:49:
+../../part_1_bsp/ps7_cortexa9_0/include/FreeRTOSConfig.h:109: note: this is the location of the previous definition
+ #define configGENERATE_RUN_TIME_STATS 0
+ 
+../src/lab_3_part_1_student.c: In function 'vUartManagerTask':
+../src/lab_3_part_1_student.c:213:1: error: version control conflict marker in file
+ <<<<<<< HEAD
+ ^~~~~~~
+../src/lab_3_part_1_student.c:217:9: error: invalid suffix "aca2920f254cd60767f1004beeac639e4f3fa96" on integer constant
+ >>>>>>> 4aca2920f254cd60767f1004beeac639e4f3fa96
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:226:1: error: version control conflict marker in file
+ <<<<<<< HEAD
+ ^~~~~~~
+../src/lab_3_part_1_student.c:230:1: error: version control conflict marker in file
+ =======
+ ^~~~~~~
+../src/lab_3_part_1_student.c:231:9: error: invalid suffix "aca2920f254cd60767f1004beeac639e4f3fa96" on integer constant
+ >>>>>>> 4aca2920f254cd60767f1004beeac639e4f3fa96
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:239:1: error: version control conflict marker in file
+ <<<<<<< HEAD
+ ^~~~~~~
+../src/lab_3_part_1_student.c:242:1: error: version control conflict marker in file
+ =======
+ ^~~~~~~
+../src/lab_3_part_1_student.c:243:9: error: invalid suffix "aca2920f254cd60767f1004beeac639e4f3fa96" on integer constant
+ >>>>>>> 4aca2920f254cd60767f1004beeac639e4f3fa96
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiMainTask':
+../src/lab_3_part_1_student.c:304:29: error: 'spiInstMaster' undeclared (first use in this function)
+      XSpiPs_SetSlaveSelect(&spiInstMaster, 0); /// COULD BE CAUSE OF ERROR
+                             ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:304:29: note: each undeclared identifier is reported only once for each function it appears in
+../src/lab_3_part_1_student.c:267:5: warning: unused variable 'send_to_FIFO2' [-Wunused-variable]
+  u8 send_to_FIFO2;
+     ^~~~~~~~~~~~~
+../src/lab_3_part_1_student.c: In function 'vSpiSubTask':
+../src/lab_3_part_1_student.c:375:27: error: 'spiInstSlave' undeclared (first use in this function)
+    XSpiPs_PolledTransfer(&spiInstSlave, &temp_store, &temp_store, 1);
+                           ^~~~~~~~~~~~
+../src/lab_3_part_1_student.c:386:43: warning: pointer targets in passing argument 2 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                           ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+../src/lab_3_part_1_student.c:386:55: warning: pointer targets in passing argument 3 of 'XSpiPs_PolledTransfer' differ in signedness [-Wpointer-sign]
+      XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
+                                                       ^~~~~~~~~~
+In file included from ../src/lab_3_part_1_student.c:59:
+../../part_1_bsp/ps7_cortexa9_0/include/xspips.h:668:5: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'char *'
+ s32 XSpiPs_PolledTransfer(XSpiPs *InstancePtr, u8 *SendBufPtr,
+     ^~~~~~~~~~~~~~~~~~~~~
+make: *** [src/subdir.mk:26: src/lab_3_part_1_student.o] Error 1

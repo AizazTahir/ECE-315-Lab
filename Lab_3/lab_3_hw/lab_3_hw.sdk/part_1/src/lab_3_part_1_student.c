@@ -166,8 +166,6 @@ static void vUartManagerTask( void *pvParameters ){
 	u8 dummy = DOLLAR; 				// dummy char to send to the slave as a control character
 
 	printMenu();
-	xil_printf("started uart task");
-
 
 	while(1){
 		if(flag==1){ 						// flag is set to 1 when the user enters the end sequence on SPI1-SPI0 mode
@@ -212,8 +210,11 @@ static void vUartManagerTask( void *pvParameters ){
 
 				if(uart_loopback == 1 && command_flag == 1){
 					XUartPs_SendByte(XPAR_XUARTPS_0_BASEADDR, uart_byte);
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 4aca2920f254cd60767f1004beeac639e4f3fa96
 					checkTerminationSequence();
 				} else if(command_flag == 2){
 					xQueueSendToBack(xQueue_FIFO1, &uart_byte, 0UL);
@@ -222,9 +223,12 @@ static void vUartManagerTask( void *pvParameters ){
 						xQueueReceive(xQueue_FIFO2, &task1_receive_from_FIFO2, portMAX_DELAY);
 						while (XUartPs_IsTransmitFull(XPAR_XUARTPS_0_BASEADDR) == TRUE);
 						XUartPs_WriteReg(XPAR_XUARTPS_0_BASEADDR, XUARTPS_FIFO_OFFSET, task1_receive_from_FIFO2);
+<<<<<<< HEAD
 
 						xil_printf("inside Spi_loopback == 1 loop");
 
+=======
+>>>>>>> 4aca2920f254cd60767f1004beeac639e4f3fa96
 						checkTerminationSequence();
 					} else if(spi_loopback == 0){
                         /*******************************************/
@@ -232,8 +236,11 @@ static void vUartManagerTask( void *pvParameters ){
                         // receive the data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"
                         // If there is space in the UART transmitter, write the byte to the UART
 						// receive data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"
+<<<<<<< HEAD
 						xil_printf("inside Spi == 0");
 
+=======
+>>>>>>> 4aca2920f254cd60767f1004beeac639e4f3fa96
 						
 						// Receive the data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"
 						xQueueReceive(xQueue_FIFO2, &task1_receive_from_FIFO2_spi_data, portMAX_DELAY);
@@ -294,16 +301,17 @@ static void vSpiMainTask( void *pvParameters ){
 				// Check if received_bytes matches TRANSFER_SIZE_IN_BYTES
 				if(received_bytes == TRANSFER_SIZE_IN_BYTES){
 					// Transmit the collected bytes via SPI
-					XSpiPs_SetSlaveSelect(XPAR_XSPIPS_0_DEVICE_ID, 0); /// COULD BE CAUSE OF ERROR
-					xil_printf("In SPI Main");
+					XSpiPs_SetSlaveSelect(&spiInstMaster, 0); /// COULD BE CAUSE OF ERROR
 					// Transmit the collected bytes via SPI
-					XSpiPs_PolledTransfer(XPAR_XSPIPS_0_DEVICE_ID, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
+					XSpiPs_PolledTransfer(&spiInstMaster, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
+					// print hi to the console
+					xil_printf("hi");
 					
 
 					// Yield the task to allow for SPI communication processing
 					taskYIELD();
 					// Read the response back from SPI
-					XSpiPs_PolledTransfer(XPAR_XSPIPS_0_DEVICE_ID, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
+					XSpiPs_PolledTransfer(&spiInstMaster, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
 					// Send the received byte back through FIFO2
 					xQueueSendToBack(xQueue_FIFO2, &send_buffer[0], 0UL);
 					// Reset received_bytes counter to prepare for the next message
@@ -364,7 +372,7 @@ static void vSpiSubTask( void *pvParameters ){
 			
 			// Utilize SpiSlave read and write functions from the driver file for SPI communication.
 			// Use "RxBuffer_Slave" for reading data from the SPI slave node.
-			XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &temp_store, &temp_store, 1);
+			XSpiPs_PolledTransfer(&spiInstSlave, &temp_store, &temp_store, 1);
 
 
 
@@ -375,7 +383,7 @@ static void vSpiSubTask( void *pvParameters ){
 				message_counter++;
 				sprintf(buffer, "\nNumber of bytes received over SPI:%d\nTotal messages received: %d\n", spi_rx_bytes, message_counter);
 				for (int i = 0; i < strlen(buffer); i++){
-					XSpiPs_PolledTransfer(XPAR_XSPIPS_1_DEVICE_ID, &buffer[i], &buffer[i], 1);
+					XSpiPs_PolledTransfer(&spiInstSlave, &buffer[i], &buffer[i], 1);
 				}
 				termination_flag = 0;
 				spi_rx_bytes = 0;
@@ -396,7 +404,7 @@ static void vSpiSubTask( void *pvParameters ){
 /**
  * This functions checks if the user input is the termination sequence \r%\r
  * When the termination sequence is detected, sequence_flag would be 3
- * Returns: None
+ * Returns: Nones
  */
 void checkTerminationSequence(void){
 
@@ -416,7 +424,7 @@ void checkTerminationSequence(void){
 	if (sequence_flag == 3){
 		command_flag = 1;
 		sequence_flag = 0;
-		spi_loopback = 0;
+		spi_loopback = 0;  // FIGURE OUT HOW THIS WORKS AND WHY IT ONLY GETS UPDATES WHEN THE TERMINATION SEQUENCE IS DETECTED (%)
 		uart_loopback = 0;
 		flag = 1;
 		xil_printf("\n*** Text entry ended using termination sequence ***\r\n");

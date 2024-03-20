@@ -23,12 +23,6 @@
 
 
 #define FRAME_DELAY 50000
-Paddle paddle = {58, 31, 10, 1}; // Initial paddle position and size
-Ball ball = {64, 16, 1, -1}; // Initial ball position and velocity
-XGpio inputGpio;
-
-// Declaring the devices
-PmodOLED oledDevice;
 
 // Define Game Elements
 typedef struct {
@@ -41,9 +35,17 @@ typedef struct {
     int dx, dy; // Velocity
 } Ball;
 
+Paddle paddle = {58, 31, 10, 1}; // Initial paddle position and size
+Ball ball = {64, 16, 1, -1}; // Initial ball position and velocity
+XGpio inputGpio;
+
+// Declaring the devices
+PmodOLED oledDevice;
+
 // Function prototypes
 void initializeScreen();
 static void oledTask( void *pvParameters );
+static void gameTask(void *pvParameters);
 
 // To change between PmodOLED and OnBoardOLED is to change Orientation
 const u8 orientation = 0x0; // Set up for Normal PmodOLED(false) vs normal

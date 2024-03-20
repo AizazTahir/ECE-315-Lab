@@ -109,6 +109,16 @@ void OLED_RectangleTo(PmodOLED *InstancePtr, int xco, int yco)
     OLED_DrawLineTo(InstancePtr, xco1, yco1);
 }
 
+void OLED_PutPixel(PmodOLED *InstancePtr, int x, int y) {
+    if (x < 0 || x >= ccolOledMax || y < 0 || y >= crowOledMax) {
+        return; // Out of bounds
+    }
+
+    int page = y / 8;
+    int bit = y % 8;
+
+    InstancePtr->OLEDState.rgbOledBmp[(page * ccolOledMax) + x] |= (1 << bit);
+}
 
 int grphAbs(int foo)
 {

@@ -298,7 +298,7 @@ static void vSpiMainTask( void *pvParameters ){
 				if(received_bytes == TRANSFER_SIZE_IN_BYTES){
 					// Transmit the collected bytes via SPI
 					XSpiPs_SetSlaveSelect(XPAR_XSPIPS_0_DEVICE_ID, 0); /// COULD BE CAUSE OF ERROR
-					xil_printf("In SPI Main \n");
+					xil_printf("In SPI Main");
 					// Transmit the collected bytes via SPI
 					XSpiPs_PolledTransfer(XPAR_XSPIPS_0_DEVICE_ID, send_buffer, send_buffer, TRANSFER_SIZE_IN_BYTES);
 					

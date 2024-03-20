@@ -223,7 +223,6 @@ static void vUartManagerTask( void *pvParameters ){
 						while (XUartPs_IsTransmitFull(XPAR_XUARTPS_0_BASEADDR) == TRUE);
 						XUartPs_WriteReg(XPAR_XUARTPS_0_BASEADDR, XUARTPS_FIFO_OFFSET, task1_receive_from_FIFO2);
 
-						xil_printf("inside Spi_loopback == 1 loop");
 
 						checkTerminationSequence();
 					} else if(spi_loopback == 0){

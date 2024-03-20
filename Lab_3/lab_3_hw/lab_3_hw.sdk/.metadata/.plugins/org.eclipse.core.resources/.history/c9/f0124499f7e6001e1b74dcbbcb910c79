@@ -212,7 +212,7 @@ static void vUartManagerTask( void *pvParameters ){
 
 				if(uart_loopback == 1 && command_flag == 1){
 					XUartPs_SendByte(XPAR_XUARTPS_0_BASEADDR, uart_byte);
-
+					xil_printf("hellooooo");
 
 					checkTerminationSequence();
 				} else if(command_flag == 2){
@@ -222,8 +222,7 @@ static void vUartManagerTask( void *pvParameters ){
 						xQueueReceive(xQueue_FIFO2, &task1_receive_from_FIFO2, portMAX_DELAY);
 						while (XUartPs_IsTransmitFull(XPAR_XUARTPS_0_BASEADDR) == TRUE);
 						XUartPs_WriteReg(XPAR_XUARTPS_0_BASEADDR, XUARTPS_FIFO_OFFSET, task1_receive_from_FIFO2);
-
-						xil_printf("inside Spi_loopback == 1 loop");
+						xil_printf("hello");
 
 						checkTerminationSequence();
 					} else if(spi_loopback == 0){
@@ -232,7 +231,7 @@ static void vUartManagerTask( void *pvParameters ){
                         // receive the data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"
                         // If there is space in the UART transmitter, write the byte to the UART
 						// receive data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"
-						xil_printf("inside Spi == 0");
+						xil_printf("hello");
 
 						
 						// Receive the data from FIFO2 into the variable "task1_receive_from_FIFO2_spi_data"

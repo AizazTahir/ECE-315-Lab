@@ -402,7 +402,7 @@ static void vSpiSubTask( void *pvParameters ){
 
 						// Print the i and len values
 						xil_printf("i: %d, len: %d\n", i, len);
-						task_yeild();
+						taskYIELD();
 						spiSlaveWrite(&buffer[i], 1); // Send one character at a time
 					}
 					termination_flag = 0;

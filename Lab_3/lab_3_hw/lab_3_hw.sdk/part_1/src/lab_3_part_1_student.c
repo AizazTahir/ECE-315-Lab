@@ -356,7 +356,7 @@ static void vSpiSubTask( void *pvParameters ){
 			// 5. Before detecting the termination sequence, ensure bytes are consistently sent back to the SPI master.
 			// 6. Upon receiving the termination sequence:
 			//    a. Construct the message string with the total number of bytes and messages received.
-			//    b. Loop through the message string and send it back to the SPI master using the appropriate SpiSlave write function.
+			//    b. Loop through the message string and send it back to the SPI master using the appropriate ` write function.
 
         	// Reads the spi input
         	spiSlaveRead(TRANSFER_SIZE_IN_BYTES);
@@ -393,12 +393,12 @@ static void vSpiSubTask( void *pvParameters ){
 					// Print the same message as above to the screen
 					xil_printf("%s", buffer);
 
-					// Loop through message to send it back
-					for (int i = 0; i < strlen(buffer); i++){
-						// Send the summary message back to the SPI master
-						spiSlaveWrite((u8*)buffer, strlen(buffer)); // Use spiSlaveWrite to send buffer
-					}
+					int len = strlen(buffer); // Calculate the length of the buffer once
 
+					// Send the message back to the SPI master
+					for (int i = 0; i < len; i++) {
+						spiSlaveWrite(&buffer[i], 1); // Send one character at a time
+					}
 					termination_flag = 0;
 					spi_rx_bytes = 0;
 					message_counter = 0;

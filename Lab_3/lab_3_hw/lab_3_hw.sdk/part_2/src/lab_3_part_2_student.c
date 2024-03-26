@@ -58,34 +58,30 @@ const u8 orientation = 0x0; // Set up for Normal PmodOLED(false) vs normal
 const u8 invert = 0x0; // true = whitebackground/black letters
                        // false = black background /white letters
 
-int main()
-{
-	// Initialize Devices
-	initializeScreen();
+int main() {
+    // Initialize Devices
+    initializeScreen();
 
-	// Initialize Keypad with the correct base address
-    PmodKYPD myKeypad;
-    KYPD_begin(&myKeypad, XPAR_KEYPAD_BASEADDR); // Correction made here
+    // Initialize Keypad with the correct base address
+    KYPD_begin(&myKeypad, XPAR_KEYPAD_BASEADDR);
 
+    xil_printf("Initialization Complete, System Ready!\n");
 
-	xil_printf("Initialization Complete, System Ready!\n");
+    // Create OLED display task
+    xTaskCreate(oledTask, "screen task", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
 
-	xTaskCreate( oledTask					/* The function that implements the task. */
-			   , "screen task"				/* Text name for the task, provided to assist debugging only. */
-			   , configMINIMAL_STACK_SIZE	/* The stack allocated to the task. */
-			   , NULL						/* The task parameter is not used, so set to NULL. */
-			   , tskIDLE_PRIORITY			/* The task runs at the idle priority. */
-			   , NULL
-			   );
+    // Create Game logic task
     xTaskCreate(gameTask, "Game Task", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
 
-	vTaskStartScheduler();
+    // Create Button input task
+    xTaskCreate(buttonInputTask, "Button Input Task", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
 
-	while(1);
+    // Start the scheduler
+    vTaskStartScheduler();
 
-	return 0;
+    while(1);
+    return 0;
 }
-
 
 void initializeScreen()
 {
@@ -228,6 +224,36 @@ static void oledTask( void *pvParameters )
         }
 	}
 }
+
+static void buttonInputTask(void *pvParameters) {
+    const TickType_t xDelay = 100 / portTICK_PERIOD_MS; // 100ms delay for debouncing
+    u32 lastButtonState = 0;
+
+    while (1) {
+        u32 buttonState = XGpio_DiscreteRead(&inputGpio, 1); // Assuming buttons are on channel 1
+
+        // Check for button 1 press (assuming it moves the paddle left)
+        if ((buttonState & 0x01) && !(lastButtonState & 0x01)) {
+            // Move paddle left
+            if (paddle.x > 0) {
+                paddle.x -= 1;
+            }
+        }
+
+        // Check for button 2 press (assuming it moves the paddle right)
+        if ((buttonState & 0x02) && !(lastButtonState & 0x02)) {
+            // Move paddle right
+            if (paddle.x < (OledColMax - paddle.width)) {
+                paddle.x += 1;
+            }
+        }
+
+        lastButtonState = buttonState; // Update the last button state
+
+        vTaskDelay(xDelay); // Delay for debouncing
+    }
+}
+
 
 void updatePaddlePosition() {
     u32 buttonState = XGpio_DiscreteRead(&inputGpio, 1); // Read the state of buttons from channel 1

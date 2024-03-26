@@ -327,7 +327,7 @@ static void vSpiMainTask( void *pvParameters ){
                 /*******************************************/
 			}
 		}
-		vTaskDelay(1);
+
 	}
 }
 

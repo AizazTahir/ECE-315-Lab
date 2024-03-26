@@ -185,7 +185,9 @@ static void vUartManagerTask( void *pvParameters ){
                 // 3. Check if the UART transmitter (XUartPs) is ready to send data. If it's full, wait until there is space.
                 // 4. Receive bytes until a null character ('\0') is received, use the UART write function
                 //    to send the received byte to the UART. Refer to the XUartPs_WriteReg function with the appropriate parameters.
-
+				
+				// Insdie the loop, send a "dummy" control character to FIFO1 to initiate communication
+				xil_printf("Inside of Uart For loop\n");
 
 
 				// Await incoming bytes from the SPIMain task via FIFO2 using xQueueReceive with portMAX_DELAY
@@ -398,6 +400,8 @@ static void vSpiSubTask( void *pvParameters ){
 
 					// Send the message back to the SPI master
 					for (int i = 0; i < len; i++) {
+						// Print a message before sending message to the SPI master
+						xil_printf("Sending message to SPI master: %c\n", buffer[i]);
 						spiSlaveWrite(&buffer[i], 1); // Send one character at a time
 					}
 					termination_flag = 0;

@@ -41,6 +41,11 @@ XGpio inputGpio;
 
 // Declaring the devices
 PmodOLED oledDevice;
+// Declare kEYPAD
+PmodKYPD myKeypad;
+
+volatile int gamePaused = 0; // 0 = running, 1 = paused
+volatile int gameRestart = 0; // Flag to indicate game needs to be restarted
 
 // Function prototypes
 void initializeScreen();
@@ -58,6 +63,11 @@ int main()
 	// Initialize Devices
 	initializeScreen();
 
+	// Initialize Keypad with the correct base address
+    PmodKYPD myKeypad;
+    KYPD_begin(&myKeypad, XPAR_KEYPAD_BASEADDR); // Correction made here
+
+
 	xil_printf("Initialization Complete, System Ready!\n");
 
 	xTaskCreate( oledTask					/* The function that implements the task. */
@@ -67,13 +77,13 @@ int main()
 			   , tskIDLE_PRIORITY			/* The task runs at the idle priority. */
 			   , NULL
 			   );
-	xTaskCreate(gameTask, "Game Task", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
+    xTaskCreate(gameTask, "Game Task", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
 
 	vTaskStartScheduler();
 
-   while(1);
+	while(1);
 
-   return 0;
+	return 0;
 }
 
 
@@ -234,27 +244,59 @@ void updatePaddlePosition() {
     }
 }
 
-static void gameTask(void *pvParameters) {
-    const TickType_t xDelay = 50 / portTICK_PERIOD_MS; // Game tick rate delay
+void resetGameState() {
+    paddle.x = 58; paddle.y = 31;
+    ball.x = 64; ball.y = 16;
+    ball.dx = 1; ball.dy = -1;
+}
 
-    // Game Initialization Code Here (if any additional initialization is needed)
+
+static void gameTask(void *pvParameters) {
+    const TickType_t xDelay = 50 / portTICK_PERIOD_MS;
+    u16 keys;
+    u8 keyChar;
+    XStatus status;
 
     while (1) {
-        updatePaddlePosition(); // Update based on input
+        keys = KYPD_getKeyStates(&myKeypad); // Get current key states
+        status = KYPD_getKeyPressed(&myKeypad, keys, &keyChar); // Check if a single key is pressed
 
-        // Update Ball Position
-        ball.x += ball.dx;
-        ball.y += ball.dy;
-
-        // Collision with edges
-        if (ball.x <= 0 || ball.x >= OledColMax) ball.dx *= -1;
-        if (ball.y <= 0 || ball.y >= OledRowMax) ball.dy *= -1;
-
-        // Collision with paddle
-        if (ball.y == paddle.y && ball.x >= paddle.x && ball.x <= (paddle.x + paddle.width)) {
-            ball.dy *= -1; // Reflect the ball
+        if (status == KYPD_SINGLE_KEY) {
+            switch(keyChar) {
+                case 'A': // Toggle pause state
+                    gamePaused = !gamePaused;
+                    break;
+                case 'B': // Set restart flag
+                    gameRestart = 1;
+                    break;
+                // Additional cases as needed
+            }
         }
 
+        if (gameRestart) {
+            resetGameState(); // Reset the game state
+            gameRestart = 0; // Clear the restart flag
+            gamePaused = 0; // Unpause the game
+        }
+
+        if (!gamePaused) {
+            updatePaddlePosition(); // Update paddle based on input
+
+            // Update Ball Position
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            // Collision with edges
+            if (ball.x <= 0 || ball.x >= OledColMax) ball.dx *= -1;
+            if (ball.y <= 0 || ball.y >= OledRowMax) ball.dy *= -1;
+
+            // Collision with paddle
+            if (ball.y == paddle.y && ball.x >= paddle.x && ball.x <= (paddle.x + paddle.width)) {
+                ball.dy *= -1; // Reflect the ball
+            }
+        }
+
+        // Always clear the buffer and redraw each loop iteration
         OLED_ClearBuffer(&oledDevice);
 
         // Draw Paddle
@@ -265,8 +307,9 @@ static void gameTask(void *pvParameters) {
         // Draw Ball
         OLED_PutPixel(&oledDevice, ball.x, ball.y);
 
+        // Update the display
         OLED_Update(&oledDevice);
 
-        vTaskDelay(xDelay); // Slow down the loop to a reasonable update rate
+        vTaskDelay(xDelay); // Control the game update rate
     }
 }

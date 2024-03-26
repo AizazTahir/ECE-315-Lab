@@ -319,16 +319,13 @@ static void vSpiMainTask( void *pvParameters ){
 					received_bytes = 0;
 
 				}
-
-
-
-				
-
                 /*******************************************/
 			}
 		}
+		vTaskDelay(1);
 
 	}
+	
 }
 
 
@@ -439,6 +436,7 @@ void checkTerminationSequence(void){
 		spi_loopback = 0;
 		uart_loopback = 0;
 		flag = 1;
+		vTaskDelay(100);
 		xil_printf("\n*** Text entry ended using termination sequence ***\r\n");
 	}
 }

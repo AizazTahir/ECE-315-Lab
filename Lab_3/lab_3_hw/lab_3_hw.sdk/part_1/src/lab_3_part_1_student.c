@@ -315,9 +315,6 @@ static void vSpiMainTask( void *pvParameters ){
 
 					// Read the response back from SPI
 					spiMasterRead(TRANSFER_SIZE_IN_BYTES);
-
-					// printf("Received from SPI: %c\n", RxBuffer_Master[0]);
-					xil_printf("Received from SPI: %c\n", RxBuffer_Master[0]);
 					
 					// Send the received byte back through FIFO2
 					xQueueSendToBack(xQueue_FIFO2, &RxBuffer_Master[0], 0UL);

@@ -39,7 +39,7 @@ Paddle paddle = {58, 31, 10, 1}; // Initial paddle position and size
 Ball ball = {64, 16, 1, -1}; // Initial ball position and velocity
 XGpio inputGpio;
 
-// Declaring the devices
+// Declaring the devicesi
 PmodOLED oledDevice;
 // Declare kEYPAD
 PmodKYPD myKeypad;
@@ -51,7 +51,6 @@ volatile int gameRestart = 0; // Flag to indicate game needs to be restarted
 void initializeScreen();
 static void oledTask( void *pvParameters );
 static void gameTask(void *pvParameters);
-static void buttonInputTask(void *pvParameters);
 
 // To change between PmodOLED and OnBoardOLED is to change Orientation
 const u8 orientation = 0x0; // Set up for Normal PmodOLED(false) vs normal
@@ -73,9 +72,6 @@ int main() {
 
     // Create Game logic task
     xTaskCreate(gameTask, "Game Task", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
-
-    // Create Button input task
-    xTaskCreate(buttonInputTask, "Button Input Task", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
 
     // Start the scheduler
     vTaskStartScheduler();
@@ -224,35 +220,6 @@ static void oledTask( void *pvParameters )
             vTaskDelay(verticalDelay);
         }
 	}
-}
-
-static void buttonInputTask(void *pvParameters) {
-    const TickType_t xDelay = 100 / portTICK_PERIOD_MS; // 100ms delay for debouncing
-    u32 lastButtonState = 0;
-
-    while (1) {
-        u32 buttonState = XGpio_DiscreteRead(&inputGpio, 1); // Assuming buttons are on channel 1
-
-        // Check for button 1 press (assuming it moves the paddle left)
-        if ((buttonState & 0x01) && !(lastButtonState & 0x01)) {
-            // Move paddle left
-            if (paddle.x > 0) {
-                paddle.x -= 1;
-            }
-        }
-
-        // Check for button 2 press (assuming it moves the paddle right)
-        if ((buttonState & 0x02) && !(lastButtonState & 0x02)) {
-            // Move paddle right
-            if (paddle.x < (OledColMax - paddle.width)) {
-                paddle.x += 1;
-            }
-        }
-
-        lastButtonState = buttonState; // Update the last button state
-
-        vTaskDelay(xDelay); // Delay for debouncing
-    }
 }
 
 

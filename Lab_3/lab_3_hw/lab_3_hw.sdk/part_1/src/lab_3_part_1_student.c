@@ -389,6 +389,7 @@ static void vSpiSubTask( void *pvParameters ){
 					sprintf(buffer, "\nNumber of bytes received over SPI:%d\nTotal messages received: %d\n", spi_rx_bytes, message_counter);
 
 					int len = strlen(buffer); // Calculate the length of the buffer once
+					str_length = len; // Store the length of the buffer in a global variable
 
 					// Send the message back to the SPI master
 					for (int i = 0; i < len; i++) {
@@ -436,7 +437,6 @@ void checkTerminationSequence(void){
 		spi_loopback = 0;
 		uart_loopback = 0;
 		flag = 1;
-		vTaskDelay(100);
 		xil_printf("\n*** Text entry ended using termination sequence ***\r\n");
 	}
 }

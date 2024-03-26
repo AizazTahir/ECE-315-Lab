@@ -400,8 +400,11 @@ static void vSpiSubTask( void *pvParameters ){
 
 					// Send the message back to the SPI master
 					for (int i = 0; i < len; i++) {
-						// Print a message before sending message to the SPI master
+						// Print a message before sending message to the SPI master print the whole buffer 
 						xil_printf("Sending message to SPI master: %c\n", buffer[i]);
+
+						// Print the i and len values
+						xil_printf("i: %d, len: %d\n", i, len);
 						spiSlaveWrite(&buffer[i], 1); // Send one character at a time
 					}
 					termination_flag = 0;

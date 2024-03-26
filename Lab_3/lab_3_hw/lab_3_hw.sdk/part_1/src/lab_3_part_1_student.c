@@ -186,8 +186,12 @@ static void vUartManagerTask( void *pvParameters ){
                 // 4. Receive bytes until a null character ('\0') is received, use the UART write function
                 //    to send the received byte to the UART. Refer to the XUartPs_WriteReg function with the appropriate parameters.
 				
-				// Insdie the loop, send a "dummy" control character to FIFO1 to initiate communication
+
 				xil_printf("Inside of Uart For loop\n");
+
+				// Print a the value of i and the lopo counter to the screen
+				xil_printf("i: %d, loop_counter: %d\n", i, loop_counter);
+				
 
 
 				// Await incoming bytes from the SPIMain task via FIFO2 using xQueueReceive with portMAX_DELAY
@@ -402,8 +406,8 @@ static void vSpiSubTask( void *pvParameters ){
 
 						// Print the i and len values
 						xil_printf("i: %d, len: %d\n", i, len);
-						taskYIELD();
 						spiSlaveWrite(&buffer[i], 1); // Send one character at a time
+						vTaskDelay(1); // Delay for 1 ms
 					}
 					termination_flag = 0;
 					spi_rx_bytes = 0;

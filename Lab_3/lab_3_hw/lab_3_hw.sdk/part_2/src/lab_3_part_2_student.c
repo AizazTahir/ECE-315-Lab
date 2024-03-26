@@ -51,6 +51,7 @@ volatile int gameRestart = 0; // Flag to indicate game needs to be restarted
 void initializeScreen();
 static void oledTask( void *pvParameters );
 static void gameTask(void *pvParameters);
+static void buttonInputTask(void *pvParameters);
 
 // To change between PmodOLED and OnBoardOLED is to change Orientation
 const u8 orientation = 0x0; // Set up for Normal PmodOLED(false) vs normal

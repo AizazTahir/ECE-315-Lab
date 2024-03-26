@@ -390,6 +390,8 @@ static void vSpiSubTask( void *pvParameters ){
 					message_counter++;
 					// Construct messgae
 					sprintf(buffer, "\nNumber of bytes received over SPI:%d\nTotal messages received: %d\n", spi_rx_bytes, message_counter);
+					// Print the same message as above to the screen
+					xil_printf("%s", buffer);
 
 					// Loop through message to send it back
 					for (int i = 0; i < strlen(buffer); i++){

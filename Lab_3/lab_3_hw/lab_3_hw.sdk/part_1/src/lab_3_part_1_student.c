@@ -190,9 +190,13 @@ static void vUartManagerTask( void *pvParameters ){
 
 				// Await incoming bytes from the SPIMain task via FIFO2 using xQueueReceive with portMAX_DELAY
 				xQueueReceive(xQueue_FIFO2, &task1_receive_from_FIFO2, portMAX_DELAY);
+				
+				// Print the received byte to the screen
+				xil_printf("Received from FIFO2: %c\n", task1_receive_from_FIFO2);
 
 				// Check if the task1_receive_from_FIFO2 is a null character
 				if(task1_receive_from_FIFO2 == '\0'){
+					xil_printf("Null character received\n");
 					break;
 				}
 					// Check if the UART transmitter (XUartPs) is ready to send data. If it's full, wait until there is space
@@ -310,8 +314,9 @@ static void vSpiMainTask( void *pvParameters ){
 					// Read the response back from SPI
 					spiMasterRead(TRANSFER_SIZE_IN_BYTES);
 
-
-
+					// printf("Received from SPI: %c\n", RxBuffer_Master[0]);
+					xil_printf("Received from SPI: %c\n", RxBuffer_Master[0]);
+					
 					// Send the received byte back through FIFO2
 					xQueueSendToBack(xQueue_FIFO2, &RxBuffer_Master[0], 0UL);
 

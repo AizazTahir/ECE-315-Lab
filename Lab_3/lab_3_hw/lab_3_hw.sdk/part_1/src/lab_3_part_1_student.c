@@ -174,7 +174,7 @@ static void vUartManagerTask( void *pvParameters ){
 			int loop_counter = str_length; 	// loop count for sending the dummy char gets assigned by spi sub task
 
 			// Send a "dummy" control character to tell the slave to start sending data (number of bytes: )
-				xQueueSendToBack(xQueue_FIFO1, &dummy, 0UL);
+			xQueueSendToBack(xQueue_FIFO1, &dummy, 0UL);
 
 			for(int i = 0; i < loop_counter; i++){
 

@@ -35,6 +35,10 @@
 
 XGpio Gpio;
 PmodOLED oledDevice;
+const u8 invert = 0x0; // true = whitebackground/black letters
+                       // false = black background /white letters
+const u8 orientation = 0x0; // Set up for Normal PmodOLED(false) vs normal
+                            // Onboard OLED(true)
 
 
 typedef struct {
@@ -45,23 +49,44 @@ Point snake[SNAKE_MAX_LENGTH]; // Snake body represented as points
 int snakeLength = 1; // Initial snake length
 Point food; // Food position
 int direction = 0; // 0=Up, 1=Right, 2=Down, 3=Left
+bool gameOver = false;
 
 // Function prototypes
 void lineSweepTask(void *pvParameters);
+bool isButtonPressed(u8 buttonPin);
+bool isFoodOnSnake(int x, int y);
+bool hasDirectionChanged();
+bool detectFoodCollision();
+
+TaskHandle_t xLineSweepTaskHandle = NULL;
+TaskHandle_t xSnakeGameTaskHandle = NULL;
+
+
 
 volatile int currentMode = 0;
 
 
 // UART interrupt handler
 void UartISR(void *CallBackRef, u32 Event, unsigned int EventData) {
+    XUartPs *UartInstancePtr = (XUartPs *)CallBackRef;
+    u8 data;
+
     if (Event == XUARTPS_EVENT_RECV_DATA) {
-        u8 data;
-        XUartPs_ReadReg(XPAR_XUARTPS_0_BASEADDR, XUARTPS_FIFO_OFFSET, &data, 1);
-        if (data == 's') { // Assuming 's' key switches modes
+        XUartPs_Recv(UartInstancePtr, &data, 1);
+
+        if (data == 's') {
             currentMode = !currentMode; // Toggle mode
+            if (currentMode == 0) {
+                vTaskResume(xLineSweepTaskHandle);
+                vTaskSuspend(xSnakeGameTaskHandle);
+            } else {
+                vTaskResume(xSnakeGameTaskHandle);
+                vTaskSuspend(xLineSweepTaskHandle);
+            }
         }
     }
 }
+
 
 // Initialize UART
 void InitializeUART() {
@@ -113,14 +138,37 @@ bool isFoodOnSnake(int x, int y) {
 
 void drawSnake() {
     for (int i = 0; i < snakeLength; i++) {
-        OLED_SetPixel(&oledDevice, snake[i].x, snake[i].y, 1); // Assume OLED_SetPixel draws a pixel
+        OLED_MoveTo(&oledDevice, snake[i].x, snake[i].y);
+        OLED_DrawPixel(&oledDevice);
     }
     OLED_Update(&oledDevice);
 }
 
 void drawFood() {
-    OLED_SetPixel(&oledDevice, food.x, food.y, 1); // Draw food
+    OLED_MoveTo(&oledDevice, food.x, food.y);
+    OLED_DrawPixel(&oledDevice);
     OLED_Update(&oledDevice);
+}
+
+bool hasDirectionChanged() {
+    static int lastDirection = -1; // Store the last direction to prevent repeated processing
+
+    // Check each direction and update the global direction variable if needed
+    if (isButtonPressed(UP_BUTTON_PIN) && direction != 2 && lastDirection != 0) {
+        lastDirection = direction = 0; // Set direction to up
+        return true;
+    } else if (isButtonPressed(RIGHT_BUTTON_PIN) && direction != 3 && lastDirection != 1) {
+        lastDirection = direction = 1; // Set direction to right
+        return true;
+    } else if (isButtonPressed(DOWN_BUTTON_PIN) && direction != 0 && lastDirection != 2) {
+        lastDirection = direction = 2; // Set direction to down
+        return true;
+    } else if (isButtonPressed(LEFT_BUTTON_PIN) && direction != 1 && lastDirection != 3) {
+        lastDirection = direction = 3; // Set direction to left
+        return true;
+    }
+
+    return false; // No change in direction
 }
 
 
@@ -128,13 +176,13 @@ void updateDirection() {
     // Pseudocode for reading input and updating direction
     // This will depend on your input mechanism
     // Example:
-    if (isButtonPressed(UP_BUTTON) && direction != 2) {
+    if (isButtonPressed(UP_BUTTON_PIN) && direction != 2) {
         direction = 0; // Set direction to up
-    } else if (isButtonPressed(RIGHT_BUTTON) && direction != 3) {
+    } else if (isButtonPressed(RIGHT_BUTTON_PIN) && direction != 3) {
         direction = 1; // Set direction to right
-    } else if (isButtonPressed(DOWN_BUTTON) && direction != 0) {
+    } else if (isButtonPressed(DOWN_BUTTON_PIN) && direction != 0) {
         direction = 2; // Set direction to down
-    } else if (isButtonPressed(LEFT_BUTTON) && direction != 1) {
+    } else if (isButtonPressed(LEFT_BUTTON_PIN) && direction != 1) {
         direction = 3; // Set direction to left
     }
 }
@@ -183,6 +231,10 @@ bool detectCollision() {
     }
 
     return false;
+}
+
+bool detectFoodCollision() {
+    return snake[0].x == food.x && snake[0].y == food.y;
 }
 
 
@@ -255,6 +307,9 @@ void lineSweepTask(void *pvParameters) {
 
 // Snake game task
 void snakeGameTask(void *pvParameters) {
+unsigned int gameSpeed = 250;
+
+
     initializeGame();
     while (!gameOver) {
         if (hasDirectionChanged()) {
@@ -266,7 +321,7 @@ void snakeGameTask(void *pvParameters) {
             displayGameOverScreen();
         } else if (detectFoodCollision()) {
             growSnake();
-            placeFood();
+            placeFoodRandomly();
         }
         updateDisplay();
         vTaskDelay(gameSpeed); // Control game speed
@@ -295,16 +350,27 @@ int InitializeGpio() {
     return XST_SUCCESS;
 }
 
-// Main function or task
-void main(void) {
+int main(void) {
     InitializeUART();
     InitializeGpio();
     OLED_Begin(&oledDevice, XPAR_PMODOLED_0_AXI_LITE_GPIO_BASEADDR, XPAR_PMODOLED_0_AXI_LITE_SPI_BASEADDR, 0, 0);
-    while (1) {
-        if (currentMode == 0) {
-            // Run line sweep task
-        } else {
-            // Run Snake game task
-        }
-    }
+
+    xil_printf("Initialization Complete, System Ready!\n");
+
+    // Create the line sweep task
+    xTaskCreate(lineSweepTask, "Line Sweep Task", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &xLineSweepTaskHandle);
+
+    // Create the snake game task
+    xTaskCreate(snakeGameTask, "Snake Game Task", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &xSnakeGameTaskHandle);
+
+    vTaskSuspend(xSnakeGameTaskHandle);
+    // Start the scheduler so the tasks start executing.
+    vTaskStartScheduler();
+
+    // If all is well, the scheduler will now be running and will never return.
+    // The following line should never execute.
+    for(;;);
+
+    // Unreachable code
+    return 0;
 }

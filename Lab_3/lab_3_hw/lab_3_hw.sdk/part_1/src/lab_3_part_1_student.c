@@ -327,6 +327,29 @@ static void vSpiMainTask( void *pvParameters ){
 					received_bytes = 0;
 
 				}
+
+				// Check if the received byte is the termination sequence
+				checkTerminationSequence();
+				
+				// If the received byte is the termination sequence then read the entire buffer
+				if (sequence_flag == 3){
+					// loop through the buffer and send it to the FIFO2
+					for (int i = 0; i < str_length; i++){
+
+						// Print message saying that the termination sequence has been detected in main task
+						xil_printf("Termination sequence detected in spi main task\n");
+						// Read the byte from the buffer from spiMasterRead
+						spiMasterRead(TRANSFER_SIZE_IN_BYTES);
+
+						
+						// Send the byte to the FIFO2
+						xQueueSendToBack(xQueue_FIFO2, &RxBuffer_Master[0], 0UL);
+					}
+					// Reset the sequence flag
+					sequence_flag = 0;
+				}
+				
+					
                 /*******************************************/
 			}
 		}
@@ -383,7 +406,7 @@ static void vSpiSubTask( void *pvParameters ){
 
 				// Update bytes read
 				spi_rx_bytes++;
-
+				// hello
 
 				// Upon receiving the termination sequence:
 				// a. Construct the message string with the total number of bytes and messages received.

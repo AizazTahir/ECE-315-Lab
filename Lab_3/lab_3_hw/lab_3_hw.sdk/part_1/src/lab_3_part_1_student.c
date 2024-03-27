@@ -328,26 +328,26 @@ static void vSpiMainTask( void *pvParameters ){
 
 				}
 
-				// Check if the received byte is the termination sequence
-				checkTerminationSequence();
+				// // Check if the received byte is the termination sequence
+				// checkTerminationSequence();
 				
-				// If the received byte is the termination sequence then read the entire buffer
-				if (sequence_flag == 3){
-					// loop through the buffer and send it to the FIFO2
-					for (int i = 0; i < str_length; i++){
+				// // If the received byte is the termination sequence then read the entire buffer
+				// if (sequence_flag == 3){
+				// 	// loop through the buffer and send it to the FIFO2
+				// 	for (int i = 0; i < str_length; i++){
 
-						// Print message saying that the termination sequence has been detected in main task
-						xil_printf("Termination sequence detected in spi main task\n");
-						// Read the byte from the buffer from spiMasterRead
-						spiMasterRead(TRANSFER_SIZE_IN_BYTES);
+				// 		// Print message saying that the termination sequence has been detected in main task
+				// 		xil_printf("Termination sequence detected in spi main task\n");
+				// 		// Read the byte from the buffer from spiMasterRead
+				// 		spiMasterRead(TRANSFER_SIZE_IN_BYTES);
 
 						
-						// Send the byte to the FIFO2
-						xQueueSendToBack(xQueue_FIFO2, &RxBuffer_Master[0], 0UL);
-					}
-					// Reset the sequence flag
-					sequence_flag = 0;
-				}
+				// 		// Send the byte to the FIFO2
+				// 		xQueueSendToBack(xQueue_FIFO2, &RxBuffer_Master[0], 0UL);
+				// 	}
+				// 	// Reset the sequence flag
+				// 	sequence_flag = 0;
+				// }
 				
 					
                 /*******************************************/
@@ -361,7 +361,7 @@ static void vSpiMainTask( void *pvParameters ){
 
 
 static void vSpiSubTask( void *pvParameters ){
-	u8 termination_flag=0;
+
 	u8 temp_store;
     int message_counter = 0; // Initialize message counter
 	int spi_rx_bytes = 0;
@@ -391,51 +391,40 @@ static void vSpiSubTask( void *pvParameters ){
 
         	temp_store = RxBuffer_Slave[0];
 
-			// Detect the termination sequence (\r%\r) and set the TERMINATION_FLAG to 3 upon successful detection
-        	if (termination_flag == 2 && temp_store == CHAR_CARRIAGE_RETURN){
-					termination_flag = 3;
-				} else if (termination_flag == 1 && temp_store == CHAR_PERCENT){
-					termination_flag = 2;
-				} else if (temp_store == CHAR_CARRIAGE_RETURN){
-					termination_flag = 1;
-				} else {
-					termination_flag = 0;
-					// Immediately return the character back to the SPI master if it's not part of the termination sequence
-					spiSlaveWrite(&temp_store, 1);
+			checkTerminationSequence();
+
+			// Update bytes read
+			spi_rx_bytes++;
+			// hello
+
+			// Upon receiving the termination sequence:
+			// a. Construct the message string with the total number of bytes and messages received.
+			// b. Loop through the message string and send it back to the SPI master using the appropriate SpiSlave write function.
+			if (sequence_flag == 3){
+
+				xil_printf("\n Inside of termination sequence slave\n");
+
+				message_counter++;
+				// Construct messgae
+				sprintf(buffer, "\nNumber of bytes received over SPI:%d\nTotal messages received: %d\n", spi_rx_bytes, message_counter);
+
+				int len = strlen(buffer); // Calculate the length of the buffer once
+				str_length = len; // Store the length of the buffer in a global variable
+
+				// Send the message back to the SPI master
+				for (int i = 0; i < len; i++) {
+					// Print a message before sending message to the SPI master print the whole buffer 
+					xil_printf("Sending message to SPI master: %c\n", buffer[i]);
+
+					// Print the i and len values
+					xil_printf("i: %d, len: %d\n", i, len);
+					spiSlaveWrite(&buffer[i], 1); // Send one character at a time
+					vTaskDelay(1); // Delay for 1 ms
 				}
-
-				// Update bytes read
-				spi_rx_bytes++;
-				// hello
-
-				// Upon receiving the termination sequence:
-				// a. Construct the message string with the total number of bytes and messages received.
-				// b. Loop through the message string and send it back to the SPI master using the appropriate SpiSlave write function.
-				if (termination_flag == 3){
-
-					xil_printf("\n Inside of termination sequence slave\n");
-
-					message_counter++;
-					// Construct messgae
-					sprintf(buffer, "\nNumber of bytes received over SPI:%d\nTotal messages received: %d\n", spi_rx_bytes, message_counter);
-
-					int len = strlen(buffer); // Calculate the length of the buffer once
-					str_length = len; // Store the length of the buffer in a global variable
-
-					// Send the message back to the SPI master
-					for (int i = 0; i < len; i++) {
-						// Print a message before sending message to the SPI master print the whole buffer 
-						xil_printf("Sending message to SPI master: %c\n", buffer[i]);
-
-						// Print the i and len values
-						xil_printf("i: %d, len: %d\n", i, len);
-						spiSlaveWrite(&buffer[i], 1); // Send one character at a time
-						vTaskDelay(1); // Delay for 1 ms
-					}
-					termination_flag = 0;
-					spi_rx_bytes = 0;
-					message_counter = 0;
-				}
+				termination_flag = 0;
+				spi_rx_bytes = 0;
+				message_counter = 0;
+			}
 
 
 			/*******************************************/

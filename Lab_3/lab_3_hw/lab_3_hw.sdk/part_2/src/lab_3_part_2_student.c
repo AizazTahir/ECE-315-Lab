@@ -20,290 +20,291 @@
 #include "PmodOLED.h"
 #include "OLEDControllerCustom.h"
 
+#include "xuartps.h"
+#include <stdbool.h>
 
 
-#define FRAME_DELAY 50000
+#define HORIZONTAL_DELAY 30 // Adjust for horizontal sweep speed
+#define VERTICAL_DELAY 15   // Adjust for vertical sweep speed
+#define SNAKE_MAX_LENGTH 20
 
-// Define Game Elements
-typedef struct {
-    int x, y;
-    int width, height;
-} Paddle;
+#define UP_BUTTON_PIN    0 // Example pin numbers, adjust to your hardware
+#define DOWN_BUTTON_PIN  1
+#define LEFT_BUTTON_PIN  2
+#define RIGHT_BUTTON_PIN 3
 
-typedef struct {
-    int x, y;
-    int dx, dy; // Velocity
-} Ball;
-
-Paddle paddle = {58, 31, 10, 1}; // Initial paddle position and size
-Ball ball = {64, 16, 1, -1}; // Initial ball position and velocity
-XGpio inputGpio;
-
-// Declaring the devicesi
+XGpio Gpio;
 PmodOLED oledDevice;
-// Declare kEYPAD
-PmodKYPD myKeypad;
 
-volatile int gamePaused = 0; // 0 = running, 1 = paused
-volatile int gameRestart = 0; // Flag to indicate game needs to be restarted
+
+typedef struct {
+    int x;
+    int y;
+} Point;
+Point snake[SNAKE_MAX_LENGTH]; // Snake body represented as points
+int snakeLength = 1; // Initial snake length
+Point food; // Food position
+int direction = 0; // 0=Up, 1=Right, 2=Down, 3=Left
 
 // Function prototypes
-void initializeScreen();
-static void oledTask( void *pvParameters );
-static void gameTask(void *pvParameters);
+void lineSweepTask(void *pvParameters);
 
-// To change between PmodOLED and OnBoardOLED is to change Orientation
-const u8 orientation = 0x0; // Set up for Normal PmodOLED(false) vs normal
-                            // Onboard OLED(true)
-const u8 invert = 0x0; // true = whitebackground/black letters
-                       // false = black background /white letters
-
-int main() {
-    // Initialize Devices
-    initializeScreen();
-
-    // Initialize Keypad with the correct base address
-    KYPD_begin(&myKeypad, XPAR_KEYPAD_BASEADDR);
-
-    xil_printf("Initialization Complete, System Ready!\n");
-
-    // Create OLED display task
-    xTaskCreate(oledTask, "screen task", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
-
-    // Create Game logic task
-    xTaskCreate(gameTask, "Game Task", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL);
-
-    // Start the scheduler
-    vTaskStartScheduler();
-
-    while(1);
-    return 0;
-}
-
-void initializeScreen()
-{
-   OLED_Begin(&oledDevice, XPAR_PMODOLED_0_AXI_LITE_GPIO_BASEADDR,
-         XPAR_PMODOLED_0_AXI_LITE_SPI_BASEADDR, orientation, invert);
-
-	// Initialize Input GPIO (Adjust the device ID as needed)
-    XGpio_Initialize(&inputGpio, XPAR_GPIO_0_DEVICE_ID); // Assuming buttons are connected to GPIO 0
-    XGpio_SetDataDirection(&inputGpio, 1, 0xFFFFFFFF); // Configure all pins of channel 1 as inputs
-}
+volatile int currentMode = 0;
 
 
-static void oledTask( void *pvParameters )
-{
-	int irow, ib, i, icol;
-	// u8 *pat;
-	// u32 ticks=0;
-
-	const int horizontalDelay = 10; // Speed of horizontal sweep (lower is faster)
-    const int verticalDelay = 5; // Speed of vertical sweep (lower is faster)
-
-	xil_printf("PmodOLED Line Sweep Demo Ready\n\r");
-
-	while (1) {
-		//ticks = xTaskGetTickCount();
-		//xil_printf("Lab 3 demo started  at: %d\r\n\n", ticks);
-		// // Choosing Fill pattern 0
-		// pat = OLED_GetStdPattern(0);
-		// OLED_SetFillPattern(&oledDevice, pat);
-		// // Turn automatic updating off
-		// OLED_SetCharUpdate(&oledDevice, 0);
-
-		// // Display text on the screen one pixel row at a time
-		// // by sweeping a horizontal line from top to bottom
-		// xil_printf("\t1. text and line demo\r\n");
-		// for (irow = 0; irow < OledRowMax; irow++) {
-		// 	OLED_ClearBuffer(&oledDevice);
-		// 	OLED_SetCursor(&oledDevice, 0, 0);
-		// 	OLED_PutString(&oledDevice, "ECE 315 Lab");
-		// 	OLED_SetCursor(&oledDevice, 0, 1);
-		// 	OLED_PutString(&oledDevice, "SPI Demo");
-		// 	OLED_SetCursor(&oledDevice, 0, 2);
-		// 	OLED_PutString(&oledDevice, "OLED Screen");
-		// 	OLED_MoveTo(&oledDevice, 0, irow);
-		// 	OLED_FillRect(&oledDevice, 127, 31);
-		// 	OLED_MoveTo(&oledDevice, 0, irow);
-		// 	OLED_DrawLineTo(&oledDevice, 127, irow);
-		// 	OLED_Update(&oledDevice);
-		// 	vTaskDelay(5);
-		// }
-
-		// vTaskDelay(200);
-		// // Blink the display three times.
-		// xil_printf("\t2. blinking display");
-		// for (i = 0; i < 3; i++) {
-		// 	xil_printf(" . ");
-		// 	OLED_DisplayOff(&oledDevice);
-		// 	vTaskDelay(50);
-		// 	OLED_DisplayOn(&oledDevice);
-		// 	vTaskDelay(50);
-		// }
-		// xil_printf("\r\n");
-		// vTaskDelay(200);
-
-
-		// // Now erase the characters from the display
-		// // by sweeping horizontal line back up
-		// xil_printf("\t3. cleaning display\r\n");
-		// for (irow = OledRowMax - 1; irow >= 0; irow--){
-		// 	OLED_SetDrawColor(&oledDevice, 1);
-		// 	OLED_SetDrawMode(&oledDevice, OledModeSet);
-		// 	OLED_MoveTo(&oledDevice, 0, irow);
-		// 	OLED_DrawLineTo(&oledDevice, 127, irow);
-		// 	OLED_Update(&oledDevice);
-		// 	vTaskDelay(10);
-		// 	OLED_SetDrawMode(&oledDevice, OledModeXor);
-		// 	OLED_MoveTo(&oledDevice, 0, irow);
-		// 	OLED_DrawLineTo(&oledDevice, 127, irow);
-		// 	OLED_Update(&oledDevice);
-		// }
-		// vTaskDelay(100);
-
-		// // Draw a rectangle in center of screen
-		// xil_printf("\t4. Drawing a rectangle");
-		// u8 rectWidth = OledColMax/2;
-		// OLED_MoveTo(&oledDevice, OledColMax/2 - rectWidth/2, 0);
-		// OLED_RectangleTo(&oledDevice, OledColMax/2 + rectWidth/2, OledRowMax - 1);
-		// OLED_Update(&oledDevice);
-		// vTaskDelay(300);
-		// // Display the 8 different patterns available
-		// xil_printf("\t5. showing rectangle fill patterns: ");
-		// OLED_SetDrawMode(&oledDevice, OledModeSet);
-
-		// for (ib = 1; ib < 8; ib++) {
-		// 	xil_printf("%d ",ib);
-		// 	OLED_ClearBuffer(&oledDevice);
-		// 	pat = OLED_GetStdPattern(ib);
-		// 	OLED_SetFillPattern(&oledDevice, pat);
-		// 	OLED_MoveTo(&oledDevice, OledColMax/2 - rectWidth/2, 0);
-		// 	OLED_FillRect(&oledDevice, OledColMax/2 + rectWidth/2, OledRowMax - 1);
-		// 	OLED_RectangleTo(&oledDevice, OledColMax/2 + rectWidth/2, OledRowMax - 1);
-		// 	OLED_Update(&oledDevice);
-		// 	vTaskDelay(100);
-		// }
-
-		// ticks = xTaskGetTickCount();
-		// xil_printf("\n\ndemo finished at: %d\r\n\n", ticks);
-		// vTaskDelay(100);
-
-		// Horizontal Line Sweep
-        for (irow = 0; irow < OledRowMax; irow++) {
-            OLED_ClearBuffer(&oledDevice);
-            OLED_MoveTo(&oledDevice, 0, irow);
-            OLED_DrawLineTo(&oledDevice, OledColMax - 1, irow); // Draw horizontal line
-            OLED_Update(&oledDevice);
-            vTaskDelay(horizontalDelay);
-        }
-        for (irow = OledRowMax - 1; irow >= 0; irow--) {
-            OLED_ClearBuffer(&oledDevice);
-            OLED_MoveTo(&oledDevice, 0, irow);
-            OLED_DrawLineTo(&oledDevice, OledColMax - 1, irow); // Draw horizontal line
-            OLED_Update(&oledDevice);
-            vTaskDelay(horizontalDelay);
-        }
-
-        // Vertical Line Sweep
-        for (icol = 0; icol < OledColMax; icol++) {
-            OLED_ClearBuffer(&oledDevice);
-            OLED_MoveTo(&oledDevice, icol, 0);
-            OLED_DrawLineTo(&oledDevice, icol, OledRowMax - 1); // Draw vertical line
-            OLED_Update(&oledDevice);
-            vTaskDelay(verticalDelay);
-        }
-        for (icol = OledColMax - 1; icol >= 0; icol--) {
-            OLED_ClearBuffer(&oledDevice);
-            OLED_MoveTo(&oledDevice, icol, 0);
-            OLED_DrawLineTo(&oledDevice, icol, OledRowMax - 1); // Draw vertical line
-            OLED_Update(&oledDevice);
-            vTaskDelay(verticalDelay);
-        }
-	}
-}
-
-
-void updatePaddlePosition() {
-    u32 buttonState = XGpio_DiscreteRead(&inputGpio, 1); // Read the state of buttons from channel 1
-
-    if (buttonState & 0x01) { // If the first button is pressed, move left
-        if (paddle.x > 0) {
-            paddle.x -= 1;
-        }
-    }
-    if (buttonState & 0x02) { // If the second button is pressed, move right
-        if (paddle.x < (OledColMax - paddle.width)) {
-            paddle.x += 1;
+// UART interrupt handler
+void UartISR(void *CallBackRef, u32 Event, unsigned int EventData) {
+    if (Event == XUARTPS_EVENT_RECV_DATA) {
+        u8 data;
+        XUartPs_ReadReg(XPAR_XUARTPS_0_BASEADDR, XUARTPS_FIFO_OFFSET, &data, 1);
+        if (data == 's') { // Assuming 's' key switches modes
+            currentMode = !currentMode; // Toggle mode
         }
     }
 }
 
-void resetGameState() {
-    paddle.x = 58; paddle.y = 31;
-    ball.x = 64; ball.y = 16;
-    ball.dx = 1; ball.dy = -1;
+// Initialize UART
+void InitializeUART() {
+    XUartPs_Config *Config = XUartPs_LookupConfig(XPAR_XUARTPS_0_DEVICE_ID);
+    XUartPs UartPs;
+    XUartPs_CfgInitialize(&UartPs, Config, Config->BaseAddress);
+    // Set up UART interrupt system here (not fully detailed, depends on your system)
+    XUartPs_SetHandler(&UartPs, UartISR, &UartPs);
+    XUartPs_SetInterruptMask(&UartPs, XUARTPS_IXR_RXOVR);
+}
+
+void initializeGame() {
+    // Initialize snake at starting position
+    snake[0].x = OledColMax / 2;
+    snake[0].y = OledRowMax / 2;
+    snakeLength = 1;
+
+    // Place initial food
+    // Note: Implement a function to ensure food doesn't spawn on the snake
+    placeFoodRandomly();
+
+    // Set initial direction
+    direction = 0; // Start moving up
+
+    // Clear display
+    OLED_ClearBuffer(&oledDevice);
+
+    // Draw initial snake and food
+    drawSnake();
+    drawFood();
+}
+
+void placeFoodRandomly() {
+    // Random placement of food
+    // Ensure food is not placed on the snake
+    do {
+        food.x = rand() % OledColMax;
+        food.y = rand() % OledRowMax;
+    } while (isFoodOnSnake(food.x, food.y));
+}
+
+bool isFoodOnSnake(int x, int y) {
+    for (int i = 0; i < snakeLength; i++) {
+        if (snake[i].x == x && snake[i].y == y)
+            return true;
+    }
+    return false;
+}
+
+void drawSnake() {
+    for (int i = 0; i < snakeLength; i++) {
+        OLED_SetPixel(&oledDevice, snake[i].x, snake[i].y, 1); // Assume OLED_SetPixel draws a pixel
+    }
+    OLED_Update(&oledDevice);
+}
+
+void drawFood() {
+    OLED_SetPixel(&oledDevice, food.x, food.y, 1); // Draw food
+    OLED_Update(&oledDevice);
 }
 
 
-static void gameTask(void *pvParameters) {
-    const TickType_t xDelay = 50 / portTICK_PERIOD_MS;
-    u16 keys;
-    u8 keyChar;
-    XStatus status;
+void updateDirection() {
+    // Pseudocode for reading input and updating direction
+    // This will depend on your input mechanism
+    // Example:
+    if (isButtonPressed(UP_BUTTON) && direction != 2) {
+        direction = 0; // Set direction to up
+    } else if (isButtonPressed(RIGHT_BUTTON) && direction != 3) {
+        direction = 1; // Set direction to right
+    } else if (isButtonPressed(DOWN_BUTTON) && direction != 0) {
+        direction = 2; // Set direction to down
+    } else if (isButtonPressed(LEFT_BUTTON) && direction != 1) {
+        direction = 3; // Set direction to left
+    }
+}
+
+void moveSnake() {
+    // Create a temporary point for the new head position
+    Point newHead = snake[0];
+
+    // Update the head position based on the current direction
+    switch (direction) {
+        case 0: // Up
+            newHead.y--;
+            break;
+        case 1: // Right
+            newHead.x++;
+            break;
+        case 2: // Down
+            newHead.y++;
+            break;
+        case 3: // Left
+            newHead.x--;
+            break;
+    }
+
+    // Move the snake body
+    for (int i = snakeLength; i > 0; i--) {
+        snake[i] = snake[i - 1];
+    }
+
+    // Update the head position
+    snake[0] = newHead;
+}
+
+
+bool detectCollision() {
+    // Check boundary collisions
+    if (snake[0].x < 0 || snake[0].x >= OledColMax || snake[0].y < 0 || snake[0].y >= OledRowMax) {
+        return true;
+    }
+
+    // Check self-collision
+    for (int i = 1; i < snakeLength; i++) {
+        if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+void growSnake() {
+    if (snakeLength < SNAKE_MAX_LENGTH) {
+        // Increase snake length by adding a segment at the current tail position
+        snakeLength++;
+    }
+}
+
+
+void updateDisplay() {
+    OLED_ClearBuffer(&oledDevice); // Clear the screen before drawing
+
+    drawSnake(); // Draw the snake on the OLED
+    drawFood();  // Draw the food on the OLED
+}
+
+
+void displayGameOverScreen() {
+    OLED_ClearBuffer(&oledDevice); // Clear the OLED display
+
+    // Assuming OLED_PutString or a similar function is available
+    // The positioning might need adjustment based on your OLED's resolution and text size
+    OLED_SetCursor(&oledDevice, 1, 1);
+    OLED_PutString(&oledDevice, "Game Over!");
+
+    OLED_Update(&oledDevice);
+}
+
+
+
+void lineSweepTask(void *pvParameters) {
+    int x = 0, y = 0;
+    int xDirection = 1, yDirection = 1; // 1 for forward, -1 for backward
+
+    OLED_ClearBuffer(&oledDevice); // Clear the screen initially
 
     while (1) {
-        keys = KYPD_getKeyStates(&myKeypad); // Get current key states
-        status = KYPD_getKeyPressed(&myKeypad, keys, &keyChar); // Check if a single key is pressed
+        OLED_ClearBuffer(&oledDevice); // Clear the screen for each frame
 
-        if (status == KYPD_SINGLE_KEY) {
-            switch(keyChar) {
-                case 'A': // Toggle pause state
-                    gamePaused = !gamePaused;
-                    break;
-                case 'B': // Set restart flag
-                    gameRestart = 1;
-                    break;
-                // Additional cases as needed
-            }
+        // Draw horizontal line
+        OLED_MoveTo(&oledDevice, 0, y);
+        OLED_DrawLineTo(&oledDevice, OledColMax - 1, y); // Draw horizontal line
+
+        // Draw vertical line
+        OLED_MoveTo(&oledDevice, x, 0);
+        OLED_DrawLineTo(&oledDevice, x, OledRowMax - 1); // Draw vertical line
+
+        OLED_Update(&oledDevice); // Update the screen with the new drawing
+
+        // Update the position for horizontal line
+        y += yDirection;
+        if (y >= OledRowMax - 1 || y <= 0) {
+            yDirection *= -1; // Change direction
         }
 
-        if (gameRestart) {
-            resetGameState(); // Reset the game state
-            gameRestart = 0; // Clear the restart flag
-            gamePaused = 0; // Unpause the game
+        // Update the position for vertical line
+        x += xDirection;
+        if (x >= OledColMax - 1 || x <= 0) {
+            xDirection *= -1; // Change direction
         }
 
-        if (!gamePaused) {
-            updatePaddlePosition(); // Update paddle based on input
+        // Delay to control the speed of the sweep
+        vTaskDelay(pdMS_TO_TICKS(HORIZONTAL_DELAY)); // Delay for horizontal line speed
+        vTaskDelay(pdMS_TO_TICKS(VERTICAL_DELAY));   // Delay for vertical line speed
+    }
+}
 
-            // Update Ball Position
-            ball.x += ball.dx;
-            ball.y += ball.dy;
 
-            // Collision with edges
-            if (ball.x <= 0 || ball.x >= OledColMax) ball.dx *= -1;
-            if (ball.y <= 0 || ball.y >= OledRowMax) ball.dy *= -1;
-
-            // Collision with paddle
-            if (ball.y == paddle.y && ball.x >= paddle.x && ball.x <= (paddle.x + paddle.width)) {
-                ball.dy *= -1; // Reflect the ball
-            }
+// Snake game task
+void snakeGameTask(void *pvParameters) {
+    initializeGame();
+    while (!gameOver) {
+        if (hasDirectionChanged()) {
+            updateDirection();
         }
-
-        // Always clear the buffer and redraw each loop iteration
-        OLED_ClearBuffer(&oledDevice);
-
-        // Draw Paddle
-        for (int i = 0; i < paddle.width; ++i) {
-            OLED_PutPixel(&oledDevice, paddle.x + i, paddle.y);
+        moveSnake();
+        if (detectCollision()) {
+            gameOver = true;
+            displayGameOverScreen();
+        } else if (detectFoodCollision()) {
+            growSnake();
+            placeFood();
         }
+        updateDisplay();
+        vTaskDelay(gameSpeed); // Control game speed
+    }
+}
 
-        // Draw Ball
-        OLED_PutPixel(&oledDevice, ball.x, ball.y);
+bool isButtonPressed(u8 buttonPin) {
+    u32 data = XGpio_DiscreteRead(&Gpio, 1); // Assuming buttons are connected to channel 1
 
-        // Update the display
-        OLED_Update(&oledDevice);
+    // Shift the read data right by `buttonPin` bits and check if the least significant bit is set
+    bool pressed = (data >> buttonPin) & 0x01;
+    return pressed;
+}
 
-        vTaskDelay(xDelay); // Control the game update rate
+int InitializeGpio() {
+    int status;
+    status = XGpio_Initialize(&Gpio, XPAR_GPIO_0_DEVICE_ID);
+    if (status != XST_SUCCESS) {
+        return XST_FAILURE;
+    }
+
+    // Assuming buttons are inputs, set them as such.
+    // You need to adjust the channel and direction mask based on your hardware configuration.
+    XGpio_SetDataDirection(&Gpio, 1, 0xFF);
+
+    return XST_SUCCESS;
+}
+
+// Main function or task
+void main(void) {
+    InitializeUART();
+    InitializeGpio();
+    OLED_Begin(&oledDevice, XPAR_PMODOLED_0_AXI_LITE_GPIO_BASEADDR, XPAR_PMODOLED_0_AXI_LITE_SPI_BASEADDR, 0, 0);
+    while (1) {
+        if (currentMode == 0) {
+            // Run line sweep task
+        } else {
+            // Run Snake game task
+        }
     }
 }

@@ -56,6 +56,12 @@ void lineSweepTask(void *pvParameters);
 TaskHandle_t xLineSweepTaskHandle = NULL;
 
 
+bool isPaused = false;
+bool isGameOver = false;
+
+XUartPs Uart_PS; // Declare a UART Device Instance
+XUartPs_Config *Config;
+
 bool getKeyPressed(PmodKYPD* myKeypad, char* key) {
     u16 keys = KYPD_getKeyStates(myKeypad);
 
@@ -194,8 +200,49 @@ void checkPaddleCollisions() {
     }
 }
 
+void checkForPause() {
+    u8 RxBuffer[1] = {0};
+    // Non-blocking read from UART
+    int RecievedCount = XUartPs_Recv(&Uart_PS, RxBuffer, 1);
+    if (RecievedCount == 1 && RxBuffer[0] == 'p') {
+        isPaused = !isPaused; // Toggle pause state
+        xil_printf("Game %s\n", isPaused ? "Paused" : "Resumed");
+    }
+}
+
+void displayGameOver(int winner) {
+    OLED_ClearBuffer(&oledDevice);
+    char gameOverMessage[30]; // Ensure this is large enough for your message
+    sprintf(gameOverMessage, "Game Over. Player %d Wins!", winner);
+    OLED_SetCursor(&oledDevice, 0, 0); // Adjust cursor position as needed
+    OLED_PutString(&oledDevice, gameOverMessage);
+    OLED_Update(&oledDevice);
+}
+
+void checkAndRestartGame() {
+    char key;
+    if (getKeyPressed(&myKeypad, &key)) {
+        if (key == '1' && isGameOver) {
+            xil_printf("Restarting game...\n");
+            isGameOver = false;
+            player1Score = 0;
+            player2Score = 0;
+            initializePongGame(); // Reinitialize game settings
+        }
+    }
+}
+
 
 void updateGame(void) {
+if (isGameOver) {
+checkAndRestartGame();
+return; // If the game is over, only check for restart
+}
+checkForPause();
+if (isPaused) {
+vTaskDelay(pdMS_TO_TICKS(100)); // Adjust this value as needed
+return; // Skip game update logic if paused
+}
     char key;
     // Check and process keypad input for paddle movement
     if (getKeyPressed(&myKeypad, &key)) {
@@ -216,13 +263,23 @@ void updateGame(void) {
 
     // Check if a player scored and update the game state accordingly
     if (ball.x <= 0) {
-        // Player 2 scores
         player2Score++;
-        resetBall(true); // Reset the ball towards player 1
+        if (player2Score >= 5) {
+            xil_printf("Game Over. Player 2 Wins!\n");
+            displayGameOver(2);
+isGameOver = true; // Indicate game is over
+return; // Stop further execution in this cycle
+        }
+        resetBall(true);
     } else if (ball.x >= OledColMax - 1) {
-        // Player 1 scores
         player1Score++;
-        resetBall(false); // Reset the ball towards player 2
+        if (player1Score >= 5) {
+            xil_printf("Game Over. Player 1 Wins!\n");
+            displayGameOver(1);
+isGameOver = true; // Indicate game is over
+return; // Stop further execution in this cycle
+        }
+        resetBall(false);
     }
 
     // Draw the updated game state
@@ -255,7 +312,19 @@ int InitializeGpio() {
 
 
 int main(void) {
-xil_printf("entering main...\n");
+// Look up the configuration based on the device ID
+Config = XUartPs_LookupConfig(XPAR_PS7_UART_1_DEVICE_ID);
+if (NULL == Config) {
+   return XST_FAILURE;
+}
+
+// Initialize the UART driver
+XUartPs_CfgInitialize(&Uart_PS, Config, Config->BaseAddress);
+
+// Check for UART configuration, assuming 115200,8,N,1 settings
+XUartPs_SetBaudRate(&Uart_PS, 115200);
+
+
     InitializeGpio();
     OLED_Begin(&oledDevice, XPAR_PMODOLED_0_AXI_LITE_GPIO_BASEADDR, XPAR_PMODOLED_0_AXI_LITE_SPI_BASEADDR, 0, 0);
 
